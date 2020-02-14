@@ -8,6 +8,7 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Hidden from "@material-ui/core/Hidden";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
 	card: {
@@ -24,6 +25,8 @@ const useStyles = makeStyles({
 export default function FeaturedPost(props) {
 	const classes = useStyles();
 	const { post } = props;
+	const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
+	const posterName = post.postedBy ? post.postedBy.name : " Unknown";
 
 	return (
 		<Grid item xs={12} md={6}>
@@ -35,21 +38,22 @@ export default function FeaturedPost(props) {
 								{post.title}
 							</Typography>
 							<Typography variant="subtitle1" color="textSecondary">
-								{post.date}
+								Posted by <Link to={`${posterId}`}>{posterName} </Link>
+								on {new Date(post.created).toDateString()}
 							</Typography>
 							<Typography variant="subtitle1" paragraph>
-								{post.description}
+								{post.body}
 							</Typography>
 							<Typography variant="subtitle1" color="primary">
-								Continue reading...
+								<Link to={`/post/${post._id}`}>Continue reading..</Link>
 							</Typography>
 						</CardContent>
 					</div>
 					<Hidden xsDown>
 						<CardMedia
 							className={classes.cardMedia}
-							image={post.image}
-							title={post.imageTitle}
+							image={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
+							title={post.title}
 						/>
 					</Hidden>
 				</Card>

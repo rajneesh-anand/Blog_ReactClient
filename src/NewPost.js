@@ -2,8 +2,20 @@ import React, { Component } from "react";
 import { isAuthenticated } from "./Auth";
 import { create } from "./apiPost";
 import { Redirect } from "react-router-dom";
-// import Select from "react-select";
-// import GetCategory from "../category/GetCategory";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Button from "@material-ui/core/Button";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import { makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
 
 class NewPost extends Component {
 	constructor() {
@@ -19,9 +31,17 @@ class NewPost extends Component {
 			redirectToProfile: false,
 			teams: [],
 			validationError: "",
-			category: {}
+			category: ""
 		};
 	}
+
+	useStyles = makeStyles(theme => ({
+		root: {
+			"& > *": {
+				margin: theme.spacing(1)
+			}
+		}
+	}));
 
 	componentDidMount() {
 		fetch(`${process.env.REACT_APP_API_URL}/categories`)
@@ -67,15 +87,15 @@ class NewPost extends Component {
 
 		const category = this.state.teams.find(u => u.name === event.target.value);
 
-		const value =
-			name === "category" ? JSON.stringify(category) : event.target.value;
-		const Photovalue =
-			name === "photo" ? event.target.files[0] : event.target.value;
+		// const value =
+		// 	name === "category" ? JSON.stringify(category) : event.target.value;
+		const value = name === "photo" ? event.target.files[0] : event.target.value;
 
 		const fileSize = name === "photo" ? event.target.files[0].size : 0;
-		this.postData.set(name, value);
-		this.postData.append("photo", Photovalue);
+		// this.postData.set(name, value);
+		// this.postData.append("photo", Photovalue);
 
+		this.postData.set(name, value);
 		this.setState({ [name]: value, fileSize });
 	};
 
@@ -85,7 +105,7 @@ class NewPost extends Component {
 		if (this.isValid()) {
 			const userId = isAuthenticated().user._id;
 			const token = isAuthenticated().token;
-
+			console.log(this.postData);
 			create(userId, token, this.postData).then(data => {
 				if (data.error) this.setState({ error: data.error });
 				else {
@@ -94,6 +114,7 @@ class NewPost extends Component {
 						loading: false,
 						title: "",
 						body: "",
+						category: "",
 
 						redirectToProfile: true
 					});
@@ -102,41 +123,118 @@ class NewPost extends Component {
 		}
 	};
 
-	newPostForm = (title, body) => (
-		<form>
-			<div className="form-group">
-				<label className="text-muted">Post Photo</label>
-				<input
-					onChange={this.handleChange("photo")}
-					type="file"
-					accept="image/*"
-					className="form-control"
-				/>
-			</div>
-			<div className="form-group">
-				<label className="text-muted">Title</label>
-				<input
-					onChange={this.handleChange("title")}
-					type="text"
-					className="form-control"
-					value={title}
-				/>
-			</div>
+	newPostForm = (title, category, body) => (
+		<React.Fragment>
+			<Grid container style={{ justifyContent: "center" }} spacing={3}>
+				<Typography
+					variant="h6"
+					gutterBottom
+					color="secondary"
+					style={{ marginTop: 15 }}
+				>
+					WRITE YOUR AWESOME BLOG
+				</Typography>
 
-			<div className="form-group">
-				<label className="text-muted">Body</label>
-				<textarea
-					onChange={this.handleChange("body")}
-					type="text"
-					className="form-control"
-					value={body}
-				/>
-			</div>
+				<Grid item xs={12} sm={10}>
+					<div style={{ display: this.state.error ? "" : "none" }}>
+						<InputLabel style={{ color: "red" }}>{this.state.error}</InputLabel>
+					</div>
+					<TextField
+						required
+						id="blogTitle"
+						value={title}
+						label="Blog Title"
+						fullWidth
+						autoComplete="blog"
+						onChange={this.handleChange("title")}
+					/>
 
-			<button onClick={this.clickSubmit} className="btn btn-raised btn-primary">
-				Create Post
-			</button>
-		</form>
+					<FormControl
+						required
+						style={{ width: 350, marginTop: 30, marginBottom: 30 }}
+					>
+						<InputLabel id="categories">Blog Category</InputLabel>
+
+						<Select
+							labelId="categories"
+							id="categories"
+							label="Blog Catetory"
+							value={category}
+							onChange={this.handleChange("category")}
+						>
+							{this.state.teams.map(cat => (
+								<MenuItem value={cat._id}>{cat.name}</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+					<InputLabel id="photo">Blog Image</InputLabel>
+					<Input
+						type="file"
+						id="photo"
+						onChange={this.handleChange("photo")}
+						type="file"
+						accept="image/*"
+						style={{ width: 350, marginBottom: 30 }}
+					/>
+
+					<TextField
+						required
+						id="body"
+						value={body}
+						label="Blog Content"
+						fullWidth
+						autoComplete="Write"
+						multiline={true}
+						rows={10}
+						rowsMax={20}
+						onChange={this.handleChange("body")}
+					/>
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={this.clickSubmit}
+						style={{ marginTop: 30, marginBottom: 30 }}
+					>
+						Create Post
+					</Button>
+				</Grid>
+			</Grid>
+		</React.Fragment>
+
+		// <form>
+		// 	<div className="form-group">
+		// 		<label className="text-muted">Post Photo</label>
+		// 		<input
+		// 			onChange={this.handleChange("photo")}
+		// 			type="file"
+		// 			accept="image/*"
+		// 			className="form-control"
+		// 		/>
+		// 	</div>
+		// 	<div className="form-group">
+		// 		<label className="text-muted">Title</label>
+		// 		<input
+		// 			onChange={this.handleChange("title")}
+		// 			type="text"
+		// 			className="form-control"
+		// 			value={title}
+		// 		/>
+		// 	</div>
+
+		// 	<div className="form-group">
+		// 		<label className="text-muted">Body</label>
+		// 		<textarea
+		// 			onChange={this.handleChange("body")}
+		// 			type="text"
+		// 			className="form-control"
+		// 			value={body}
+		// 		/>
+		// 	</div>
+
+		// 	<button onClick={this.clickSubmit} className="btn btn-raised btn-primary">
+		// 		Create Post
+		// 	</button>
+		// </form>
 	);
 
 	render() {
@@ -157,21 +255,13 @@ class NewPost extends Component {
 			return <Redirect to={`/user/${user._id}`} />;
 		}
 
-		let planets = teams;
-		let optionItems = planets.map(planet => (
-			<option key={planet._id}>{planet.name}</option>
-		));
+		// let planets = teams;
+		// let optionItems = planets.map(planet => (
+		// 	<option key={planet._id}>{planet.name}</option>
+		// ));
 
 		return (
-			<div className="container">
-				<h2 className="mt-5 mb-5">Create a new post</h2>
-				<div
-					className="alert alert-danger"
-					style={{ display: error ? "" : "none" }}
-				>
-					{error}
-				</div>
-
+			<div>
 				{loading ? (
 					<div className="jumbotron text-center">
 						<h2>Loading...</h2>
@@ -179,20 +269,10 @@ class NewPost extends Component {
 				) : (
 					""
 				)}
-				{/* <div>
-                <GetCategory state={this.state}/>
-                </div> */}
-				{/* <div className="form-group">
-					<label className="text-muted">Select Blog Category</label>
-					<select
-						className="form-control dropdown"
-						onChange={this.handleChange("category")}
-					>
-						{optionItems}
-					</select>
-				</div> */}
 
-				{this.newPostForm(title, body)}
+				{/* <select onChange={this.handleChange("category")}>{optionItems}</select> */}
+
+				{this.newPostForm(title, category, body)}
 			</div>
 		);
 	}

@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import { isAuthenticated } from "./Auth";
 import { remove } from "./apiUser";
 import { signout } from "./Auth";
+import Button from "@material-ui/core/Button";
 
 class DeleteUser extends Component {
 	state = {
@@ -38,12 +39,13 @@ class DeleteUser extends Component {
 			return <Redirect to="/" />;
 		}
 		return (
-			<button
+			<Button
 				onClick={this.deleteConfirmed}
-				className="btn btn-raised btn-danger"
+				variant="contained"
+				color="secondary"
 			>
 				Delete Profile
-			</button>
+			</Button>
 		);
 	}
 }

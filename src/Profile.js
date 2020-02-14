@@ -7,6 +7,15 @@ import DeleteUser from "./DeleteUser";
 import FollowProfileButton from "./FollowProfileButton";
 import ProfileTabs from "./ProfileTabs";
 import { listByUser } from "./apiPost";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
 
 class Profile extends Component {
 	constructor() {
@@ -19,6 +28,17 @@ class Profile extends Component {
 			posts: []
 		};
 	}
+
+	useStyles = makeStyles(theme => ({
+		root: {
+			flexGrow: 1
+		},
+		paper: {
+			padding: theme.spacing(2),
+			alignItems: "center",
+			color: theme.palette.text.secondary
+		}
+	}));
 
 	// check follow
 	checkFollow = user => {
@@ -88,42 +108,43 @@ class Profile extends Component {
 			: DefaultProfile;
 
 		return (
-			<div className="container">
-				<h2 className="mt-5 mb-5">Profile</h2>
-				<div className="row">
-					<div className="col-md-4">
+			<div className={this.useStyles.root}>
+				<Grid container spacing={3}>
+					<Grid item xs={12} sm={6} align="center">
+						<h2>My Profile</h2>
 						<img
 							style={{ height: "200px", width: "auto" }}
-							className="img-thumbnail"
 							src={photoUrl}
 							onError={i => (i.target.src = `${DefaultProfile}`)}
 							alt={user.name}
 						/>
-					</div>
-
-					<div className="col-md-8">
-						<div className="lead mt-2">
-							<p>Hello {user.name}</p>
-							<p>Email: {user.email}</p>
-							<p>{`Joined ${new Date(user.created).toDateString()}`}</p>
-						</div>
+						<p>Hello {user.name}</p>
+						<p>Email: {user.email}</p>
+						<p>{`Joined ${new Date(user.created).toDateString()}`}</p>
 
 						{isAuthenticated().user &&
 						isAuthenticated().user._id === user._id ? (
-							<div className="d-inline-block">
-								<Link
-									className="btn btn-raised btn-info mr-5"
+							<div>
+								<Button
+									variant="contained"
+									color="primary"
+									component={Link}
 									to={`/post/create`}
+									style={{ margin: 5 }}
 								>
 									Create Post
-								</Link>
+								</Button>
 
-								<Link
-									className="btn btn-raised btn-success mr-5"
+								<Button
+									variant="contained"
+									color="primary"
+									component={Link}
 									to={`/user/edit/${user._id}`}
+									style={{ margin: 5 }}
 								>
 									Edit Profile
-								</Link>
+								</Button>
+
 								<DeleteUser userId={user._id} />
 							</div>
 						) : (
@@ -132,43 +153,32 @@ class Profile extends Component {
 								onButtonClick={this.clickFollowButton}
 							/>
 						)}
+					</Grid>
 
-						<div>
-							{isAuthenticated().user &&
-								isAuthenticated().user.role === "admin" && (
-									<div className="card mt-5">
-										<div className="card-body">
-											<h5 className="card-title">Admin</h5>
-											<p className="mb-2 text-danger">
-												Edit/Delete as an Admin
-											</p>
-											<Link
-												className="btn btn-raised btn-success mr-5"
-												to={`/user/edit/${user._id}`}
-											>
-												Edit Profile
-											</Link>
-											{/*<DeleteUser userId={user._id} />*/}
-											<DeleteUser />
-										</div>
-									</div>
-								)}
-						</div>
-					</div>
-				</div>
-				<div className="row">
-					<div className="col md-12 mt-5 mb-5">
-						<hr />
-						<p className="lead">{user.about}</p>
-						<hr />
-
+					<Grid item xs={12} sm={6} align="center">
+						{isAuthenticated().user && isAuthenticated().user.role === "admin" && (
+							<div className="card mt-5">
+								<div className="card-body">
+									<h5 className="card-title">Admin</h5>
+									<p className="mb-2 text-danger">Edit/Delete as an Admin</p>
+									<Link
+										className="btn btn-raised btn-success mr-5"
+										to={`/user/edit/${user._id}`}
+									>
+										Edit Profile
+									</Link>
+									{/*<DeleteUser userId={user._id} />*/}
+									<DeleteUser />
+								</div>
+							</div>
+						)}
 						<ProfileTabs
 							followers={user.followers}
 							following={user.following}
 							posts={posts}
 						/>
-					</div>
-				</div>
+					</Grid>
+				</Grid>
 			</div>
 		);
 	}

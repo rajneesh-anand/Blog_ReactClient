@@ -11,6 +11,7 @@ import { Link, withRouter } from "react-router-dom";
 import { signout, isAuthenticated } from "./Auth";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import AppBar from "@material-ui/core/AppBar";
 // import history from "./History";
 
 const useStyles = makeStyles(theme => ({
@@ -46,7 +47,7 @@ const sections = [
 const isActive = (history, path) => {
 	console.log(`history = ${history} and path = ${path}`);
 	if (history.location.pathname === path) return { color: "green" };
-	else return { color: "red" };
+	else return { color: "#3385ff" };
 };
 
 const Header = ({ history }) => {
@@ -86,12 +87,20 @@ const Header = ({ history }) => {
 
 				{!isAuthenticated() && (
 					<Fragment>
-						<Link style={isActive(history, "/signup")} to="/signup">
+						<Button
+							component={Link}
+							style={isActive(history, "/signup")}
+							to="/signup"
+						>
 							REGISTER
-						</Link>
-						<Link style={isActive(history, "/signin")} to="/signin">
+						</Button>
+						<Button
+							component={Link}
+							style={isActive(history, "/signin")}
+							to="/signin"
+						>
 							LOGIN
-						</Link>
+						</Button>
 					</Fragment>
 				)}
 				{isAuthenticated() && (
@@ -122,7 +131,8 @@ const Header = ({ history }) => {
 						>
 							<MenuItem onClick={handleClose}>Profile</MenuItem>
 							<MenuItem onClick={handleClose}>
-								<Link
+								<Button
+									component={Link}
 									to={`/user/${isAuthenticated().user._id}`}
 									style={isActive(
 										history,
@@ -130,10 +140,11 @@ const Header = ({ history }) => {
 									)}
 								>
 									My Profile
-								</Link>
+								</Button>
 							</MenuItem>
 							<MenuItem>
 								<Button
+									component={Link}
 									style={{ cursor: "pointer", color: "red" }}
 									onClick={() => signout(() => history.push("/"))}
 								>
@@ -151,24 +162,27 @@ const Header = ({ history }) => {
 					// </Button>
 				)}
 			</Toolbar>
-			<Toolbar
-				component="nav"
-				variant="dense"
-				className={classes.toolbarSecondary}
-			>
-				{sections.map(section => (
-					<Link
-						color="inherit"
-						noWrap
-						key={section.title}
-						variant="body2"
-						href={section.url}
-						className={classes.toolbarLink}
-					>
-						{section.title}
-					</Link>
-				))}
-			</Toolbar>
+			<AppBar position="sticky" color="default">
+				<Toolbar
+					component="nav"
+					variant="dense"
+					className={classes.toolbarSecondary}
+					style={{ position: "sticky" }}
+				>
+					{sections.map(section => (
+						<Button
+							color="inherit"
+							noWrap
+							key={section.title}
+							variant="body2"
+							href={section.url}
+							className={classes.toolbarLink}
+						>
+							{section.title}
+						</Button>
+					))}
+				</Toolbar>
+			</AppBar>
 		</React.Fragment>
 	);
 };

@@ -88,6 +88,9 @@ export default function Blog() {
 							<FeaturedPost key={post.title} post={post} />
 						))}
 					</Grid>
+					<Grid container spacing={4}>
+						<Posts />
+					</Grid>
 					<Grid container spacing={5} className={classes.mainGrid}>
 						{/* <Main title="From the firehose" posts={posts} /> */}
 						<Sidebar
@@ -98,7 +101,6 @@ export default function Blog() {
 						/>
 					</Grid>
 				</main>
-				<Posts />
 			</Container>
 			<Footer
 				title="Footer"
