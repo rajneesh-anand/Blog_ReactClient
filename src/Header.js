@@ -6,13 +6,11 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import Typography from "@material-ui/core/Typography";
-// import Link from "@material-ui/core/Link";
 import { Link, withRouter } from "react-router-dom";
 import { signout, isAuthenticated } from "./Auth";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import AppBar from "@material-ui/core/AppBar";
-// import history from "./History";
 
 const useStyles = makeStyles(theme => ({
 	toolbar: {
@@ -32,8 +30,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const sections = [
-	{ title: "Technology", url: "/technology" },
-	{ title: "Design", url: "#" },
+	{ title: "Technology", url: "/posts/technology" },
+	{ title: "Design", url: "/posts/design" },
 	{ title: "Culture", url: "#" },
 	{ title: "Business", url: "#" },
 	{ title: "Politics", url: "#" },
@@ -45,16 +43,19 @@ const sections = [
 ];
 
 const isActive = (history, path) => {
-	console.log(`history = ${history} and path = ${path}`);
-	if (history.location.pathname === path) return { color: "green" };
-	else return { color: "#3385ff" };
+	// console.log(`history = ${history.location.pathname} and path = ${path}`);
+	if (history.location.pathname === path) return { color: "blue" };
+	else return { color: "black" };
 };
 
 const Header = ({ history }) => {
 	const [anchorEl, setAnchorEl] = React.useState(null);
-
 	const handleClick = event => {
 		setAnchorEl(event.currentTarget);
+	};
+
+	const changeEvent = event => {
+		setAnchorEl(event.currentTarget ? false : true);
 	};
 
 	const handleClose = () => {
@@ -62,7 +63,6 @@ const Header = ({ history }) => {
 	};
 
 	const classes = useStyles();
-	// const { title } = props;
 
 	return (
 		<React.Fragment>
@@ -73,7 +73,6 @@ const Header = ({ history }) => {
 					variant="h5"
 					color="inherit"
 					align="center"
-					noWrap
 					className={classes.toolbarTitle}
 				>
 					Blog
@@ -84,29 +83,31 @@ const Header = ({ history }) => {
 				<Fragment>
 					<Link style={isActive(history, "/")} to="/"></Link>
 				</Fragment>
+				<Fragment>
+					{!isAuthenticated() && (
+						<Fragment>
+							<Button
+								component={Link}
+								style={isActive(history, "/signup")}
+								to="/signup"
+							>
+								REGISTER
+							</Button>
+							<Button
+								component={Link}
+								style={isActive(history, "/signin")}
+								to="/signin"
+								onClick={changeEvent}
+							>
+								LOGIN
+							</Button>
+						</Fragment>
+					)}
 
-				{!isAuthenticated() && (
-					<Fragment>
+					{isAuthenticated() && (
+						<div>
+							{/* 
 						<Button
-							component={Link}
-							style={isActive(history, "/signup")}
-							to="/signup"
-						>
-							REGISTER
-						</Button>
-						<Button
-							component={Link}
-							style={isActive(history, "/signin")}
-							to="/signin"
-						>
-							LOGIN
-						</Button>
-					</Fragment>
-				)}
-				{isAuthenticated() && (
-					<div>
-						{/* 
-<Button
                             to={`/user/${isAuthenticated().user._id}`}
                             style={isActive(history, `/user/${isAuthenticated().user._id}`)}
                             
@@ -114,53 +115,53 @@ const Header = ({ history }) => {
                             {` Welcome ${isAuthenticated().user.name}`}
                         </Button> */}
 
-						<Button
-							style={{ alignContent: "flex-end" }}
-							aria-controls="simple-menu"
-							aria-haspopup="true"
-							onClick={handleClick}
-						>
-							{` Welcome ${isAuthenticated().user.name}`}
-						</Button>
-						<Menu
-							id="simple-menu"
-							anchorEl={anchorEl}
-							keepMounted
-							open={Boolean(anchorEl)}
-							onClose={handleClose}
-						>
-							<MenuItem onClick={handleClose}>Profile</MenuItem>
-							<MenuItem onClick={handleClose}>
-								<Button
-									component={Link}
-									to={`/user/${isAuthenticated().user._id}`}
-									style={isActive(
-										history,
-										`/user/${isAuthenticated().user._id}`
-									)}
-								>
-									My Profile
-								</Button>
-							</MenuItem>
-							<MenuItem>
-								<Button
-									component={Link}
-									style={{ cursor: "pointer", color: "red" }}
-									onClick={() => signout(() => history.push("/"))}
-								>
-									Sign Out
-								</Button>
-							</MenuItem>
-						</Menu>
-					</div>
+							<Button
+								style={{ alignContent: "flex-end" }}
+								aria-controls="simple-menu"
+								aria-haspopup="true"
+								onClick={handleClick}
+							>
+								{` Welcome ${isAuthenticated().user.name}`}
+							</Button>
+							<Menu
+								id="simple-menu"
+								anchorEl={anchorEl}
+								keepMounted
+								open={Boolean(anchorEl)}
+								onClose={handleClose}
+							>
+								<MenuItem onClick={handleClose}>Profile</MenuItem>
+								<MenuItem onClick={handleClose}>
+									<Button
+										component={Link}
+										to={`/user/${isAuthenticated().user._id}`}
+										style={isActive(
+											history,
+											`/user/${isAuthenticated().user._id}`
+										)}
+									>
+										My Profile
+									</Button>
+								</MenuItem>
+								<MenuItem>
+									<Button
+										style={{ cursor: "pointer", color: "red" }}
+										onClick={() => signout(() => history.push("/"))}
+									>
+										Sign Out
+									</Button>
+								</MenuItem>
+							</Menu>
+						</div>
 
-					// <Button
-					// 	style={{ cursor: "pointer", color: "red" }}
-					// 	onClick={() => signout(() => history.push("/"))}
-					// >
-					// 	Sign Out
-					// </Button>
-				)}
+						// <Button
+						// 	style={{ cursor: "pointer", color: "red" }}
+						// 	onClick={() => signout(() => history.push("/"))}
+						// >
+						// 	Sign Out
+						// </Button>
+					)}
+				</Fragment>
 			</Toolbar>
 			<AppBar position="sticky" color="default">
 				<Toolbar
@@ -172,9 +173,7 @@ const Header = ({ history }) => {
 					{sections.map(section => (
 						<Button
 							color="inherit"
-							noWrap
 							key={section.title}
-							variant="body2"
 							href={section.url}
 							className={classes.toolbarLink}
 						>

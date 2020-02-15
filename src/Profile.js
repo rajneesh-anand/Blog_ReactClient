@@ -8,14 +8,9 @@ import FollowProfileButton from "./FollowProfileButton";
 import ProfileTabs from "./ProfileTabs";
 import { listByUser } from "./apiPost";
 import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
+import Admin from "./Admin";
+import "./Styles/custom.css";
 
 class Profile extends Component {
 	constructor() {
@@ -28,17 +23,6 @@ class Profile extends Component {
 			posts: []
 		};
 	}
-
-	useStyles = makeStyles(theme => ({
-		root: {
-			flexGrow: 1
-		},
-		paper: {
-			padding: theme.spacing(2),
-			alignItems: "center",
-			color: theme.palette.text.secondary
-		}
-	}));
 
 	// check follow
 	checkFollow = user => {
@@ -108,10 +92,9 @@ class Profile extends Component {
 			: DefaultProfile;
 
 		return (
-			<div className={this.useStyles.root}>
+			<React.Fragment>
 				<Grid container spacing={3}>
 					<Grid item xs={12} sm={6} align="center">
-						<h2>My Profile</h2>
 						<img
 							style={{ height: "200px", width: "auto" }}
 							src={photoUrl}
@@ -155,23 +138,7 @@ class Profile extends Component {
 						)}
 					</Grid>
 
-					<Grid item xs={12} sm={6} align="center">
-						{isAuthenticated().user && isAuthenticated().user.role === "admin" && (
-							<div className="card mt-5">
-								<div className="card-body">
-									<h5 className="card-title">Admin</h5>
-									<p className="mb-2 text-danger">Edit/Delete as an Admin</p>
-									<Link
-										className="btn btn-raised btn-success mr-5"
-										to={`/user/edit/${user._id}`}
-									>
-										Edit Profile
-									</Link>
-									{/*<DeleteUser userId={user._id} />*/}
-									<DeleteUser />
-								</div>
-							</div>
-						)}
+					<Grid item xs={12} sm={6}>
 						<ProfileTabs
 							followers={user.followers}
 							following={user.following}
@@ -179,7 +146,25 @@ class Profile extends Component {
 						/>
 					</Grid>
 				</Grid>
-			</div>
+
+				<Grid container spacing={3}>
+					<Grid item xs={12} sm={12}>
+						{isAuthenticated().user && isAuthenticated().user.role === "admin" && (
+							<div>
+								<Admin />
+								<h5>Admin</h5>
+								<p>Edit/Delete as an Admin</p>
+								<Link
+									className="btn btn-raised btn-success mr-5"
+									to={`/user/edit/${user._id}`}
+								>
+									Edit Profile
+								</Link>
+							</div>
+						)}
+					</Grid>
+				</Grid>
+			</React.Fragment>
 		);
 	}
 }

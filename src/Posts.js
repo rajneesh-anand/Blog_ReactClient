@@ -51,7 +51,7 @@ class Posts extends Component {
 						{/* <MainFeaturedPost post={mainFeaturedPost} /> */}
 						<Grid container spacing={4}>
 							{posts.map(post => (
-								<FeaturedPost post={post} />
+								<FeaturedPost key={post._id} post={post} />
 							))}
 						</Grid>
 					</main>

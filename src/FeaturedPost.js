@@ -30,34 +30,34 @@ export default function FeaturedPost(props) {
 
 	return (
 		<Grid item xs={12} md={6}>
-			<CardActionArea component="a" href="#">
-				<Card className={classes.card}>
-					<div className={classes.cardDetails}>
-						<CardContent>
-							<Typography component="h2" variant="h5">
-								{post.title}
-							</Typography>
-							<Typography variant="subtitle1" color="textSecondary">
-								Posted by <Link to={`${posterId}`}>{posterName} </Link>
-								on {new Date(post.created).toDateString()}
-							</Typography>
-							<Typography variant="subtitle1" paragraph>
-								{post.body}
-							</Typography>
-							<Typography variant="subtitle1" color="primary">
-								<Link to={`/post/${post._id}`}>Continue reading..</Link>
-							</Typography>
-						</CardContent>
-					</div>
-					<Hidden xsDown>
-						<CardMedia
-							className={classes.cardMedia}
-							image={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
-							title={post.title}
-						/>
-					</Hidden>
-				</Card>
-			</CardActionArea>
+			{/* <CardActionArea component="a" href="#"> */}
+			<Card className={classes.card}>
+				<div className={classes.cardDetails}>
+					<CardContent>
+						<Typography component="h2" variant="h5">
+							{post.title}
+						</Typography>
+						<Typography variant="subtitle1" color="textSecondary">
+							Posted by <Link to={`${posterId}`}>{posterName} </Link>
+							on {new Date(post.created).toDateString()}
+						</Typography>
+						<Typography variant="subtitle1" paragraph>
+							{post.body}
+						</Typography>
+						<Typography variant="subtitle1" color="primary">
+							<Link to={`/post/${post._id}`}>Continue reading..</Link>
+						</Typography>
+					</CardContent>
+				</div>
+				<Hidden xsDown>
+					<CardMedia
+						className={classes.cardMedia}
+						image={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
+						title={post.title}
+					/>
+				</Hidden>
+			</Card>
+			{/* </CardActionArea> */}
 		</Grid>
 	);
 }

@@ -55,22 +55,22 @@ const sidebar = {
 	description:
 		"Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.",
 	archives: [
-		{ title: "March 2020", url: "#" },
-		{ title: "February 2020", url: "#" },
-		{ title: "January 2020", url: "#" },
-		{ title: "November 1999", url: "#" },
-		{ title: "October 1999", url: "#" },
-		{ title: "September 1999", url: "#" },
-		{ title: "August 1999", url: "#" },
-		{ title: "July 1999", url: "#" },
-		{ title: "June 1999", url: "#" },
-		{ title: "May 1999", url: "#" },
-		{ title: "April 1999", url: "#" }
+		{ id: 1, title: "March 2020", url: "#" },
+		{ id: 2, title: "February 2020", url: "#" },
+		{ id: 3, title: "January 2020", url: "#" },
+		{ id: 4, title: "November 1999", url: "#" },
+		{ id: 5, title: "October 1999", url: "#" },
+		{ id: 6, title: "September 1999", url: "#" },
+		{ id: 7, title: "August 1999", url: "#" },
+		{ id: 8, title: "July 1999", url: "#" },
+		{ id: 9, title: "June 1999", url: "#" },
+		{ id: 10, title: "May 1999", url: "#" },
+		{ id: 11, title: "April 1999", url: "#" }
 	],
 	social: [
-		{ name: "GitHub", icon: GitHubIcon },
-		{ name: "Twitter", icon: TwitterIcon },
-		{ name: "Facebook", icon: FacebookIcon }
+		{ id: 1, name: "GitHub", icon: GitHubIcon },
+		{ id: 2, name: "Twitter", icon: TwitterIcon },
+		{ id: 3, name: "Facebook", icon: FacebookIcon }
 	]
 };
 
@@ -92,13 +92,12 @@ export default function Blog() {
 						<Posts />
 					</Grid>
 					<Grid container spacing={5} className={classes.mainGrid}>
-						{/* <Main title="From the firehose" posts={posts} /> */}
-						<Sidebar
+						{/* <Sidebar
 							title={sidebar.title}
 							description={sidebar.description}
 							archives={sidebar.archives}
 							social={sidebar.social}
-						/>
+						/> */}
 					</Grid>
 				</main>
 			</Container>
