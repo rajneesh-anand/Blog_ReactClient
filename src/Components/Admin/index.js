@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Posts from "./Posts";
+import Posts from "../Posts/Posts";
 import Category from "./Category";
 import Users from "./Users";
-import { isAuthenticated } from "./Auth";
+import { isAuthenticated } from "../Auth";
 import { Redirect } from "react-router-dom";
 
 class Admin extends Component {

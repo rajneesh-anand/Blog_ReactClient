@@ -16,3 +16,9 @@ h3 {
 	font-family: "Roboto", sans-serif;
 	font-size: medium;
 }
+a {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}

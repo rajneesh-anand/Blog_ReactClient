@@ -1,16 +1,16 @@
 import React, { Component } from "react";
-import { isAuthenticated } from "./Auth";
+import { isAuthenticated } from "../Auth";
 import { Redirect, Link } from "react-router-dom";
 import { read } from "./apiUser";
-import DefaultProfile from "./images/avatar.jpg";
+import DefaultProfile from "../Images/avatar.jpg";
 import DeleteUser from "./DeleteUser";
 import FollowProfileButton from "./FollowProfileButton";
 import ProfileTabs from "./ProfileTabs";
-import { listByUser } from "./apiPost";
+import { listByUser } from "../Posts/ApiPost";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import Admin from "./Admin";
-import "./Styles/custom.css";
+import Admin from "../Admin";
+import { Typography } from "@material-ui/core";
 
 class Profile extends Component {
 	constructor() {
@@ -93,17 +93,19 @@ class Profile extends Component {
 
 		return (
 			<React.Fragment>
-				<Grid container spacing={3}>
-					<Grid item xs={12} sm={6} align="center">
+				<Grid container style={{ marginTop: 16 }}>
+					<Grid item xs={12} sm={4} align="center">
 						<img
-							style={{ height: "200px", width: "auto" }}
+							style={{ height: "150px", borderRadius: "25px", width: "auto" }}
 							src={photoUrl}
 							onError={i => (i.target.src = `${DefaultProfile}`)}
 							alt={user.name}
 						/>
-						<p>Hello {user.name}</p>
-						<p>Email: {user.email}</p>
-						<p>{`Joined ${new Date(user.created).toDateString()}`}</p>
+						<Typography>Hello {user.name}</Typography>
+						<Typography>Email: {user.email}</Typography>
+						<Typography>{`Joined ${new Date(
+							user.created
+						).toDateString()}`}</Typography>
 
 						{isAuthenticated().user &&
 						isAuthenticated().user._id === user._id ? (
@@ -138,7 +140,7 @@ class Profile extends Component {
 						)}
 					</Grid>
 
-					<Grid item xs={12} sm={6}>
+					<Grid item xs={12} sm={8}>
 						<ProfileTabs
 							followers={user.followers}
 							following={user.following}
@@ -147,7 +149,7 @@ class Profile extends Component {
 					</Grid>
 				</Grid>
 
-				<Grid container spacing={3}>
+				<Grid container spacing={1}>
 					<Grid item xs={12} sm={12}>
 						{isAuthenticated().user && isAuthenticated().user.role === "admin" && (
 							<div>

@@ -1,31 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-	makeStyles,
-	createMuiTheme,
-	ThemeProvider
-} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-
-const theme = createMuiTheme({
-	typography: {
-		fontFamily: [
-			"-apple-system",
-			"BlinkMacSystemFont",
-			'"Segoe UI"',
-			"Roboto",
-			'"Helvetica Neue"',
-			"Arial",
-			"sans-serif",
-			'"Apple Color Emoji"',
-			'"Segoe UI Emoji"',
-			'"Segoe UI Symbol"'
-		].join(","),
-		fontSize: 12
-	}
-});
+import { Link, withRouter } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
 	footer: {
@@ -38,7 +16,7 @@ function Copyright() {
 	return (
 		<Typography align="center">
 			{"Copyright © "}
-			<Link color="inherit" href="https://material-ui.com/">
+			<Link color="inherit" to="https://material-ui.com/">
 				Your Website
 			</Link>{" "}
 			{new Date().getFullYear()}
@@ -47,26 +25,26 @@ function Copyright() {
 	);
 }
 
-export default function Footer(props) {
+const Footer = props => {
 	const classes = useStyles();
 	const { description, title } = props;
 
 	return (
 		<footer className={classes.footer}>
 			<Container maxWidth="lg">
-				<ThemeProvider theme={theme}>
-					<Typography align="center" gutterBottom>
-						{title}
-					</Typography>
-					<Typography align="center">{description}</Typography>
-					<Copyright />
-				</ThemeProvider>
+				<Typography align="center" gutterBottom>
+					{title}
+				</Typography>
+				<Typography align="center">{description}</Typography>
+				<Copyright />
 			</Container>
 		</footer>
 	);
-}
+};
 
 Footer.propTypes = {
 	description: PropTypes.string,
 	title: PropTypes.string
 };
+
+export default withRouter(Footer);

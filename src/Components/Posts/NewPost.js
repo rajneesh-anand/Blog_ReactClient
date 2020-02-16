@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { isAuthenticated } from "./Auth";
-import { create } from "./apiPost";
+import { isAuthenticated } from "../Auth";
+import { create } from "./ApiPost";
 import { Redirect } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -85,7 +85,7 @@ class NewPost extends Component {
 	handleChange = name => event => {
 		this.setState({ error: "" });
 
-		const category = this.state.teams.find(u => u.name === event.target.value);
+		// const category = this.state.teams.find(u => u.name === event.target.value);
 
 		// const value =
 		// 	name === "category" ? JSON.stringify(category) : event.target.value;
@@ -123,20 +123,20 @@ class NewPost extends Component {
 		}
 	};
 
-	newPostForm = (title, category, body) => (
+	newPostForm = (title, category, body, teams, error) => (
 		<React.Fragment>
-			<Grid container style={{ justifyContent: "center" }} spacing={3}>
+			<Grid container style={{ justifyContent: "center" }}>
 				<Typography
 					variant="h6"
 					gutterBottom
 					color="secondary"
-					style={{ marginTop: 15 }}
+					style={{ marginTop: 30 }}
 				>
 					WRITE YOUR AWESOME BLOG
 				</Typography>
 
 				<Grid item xs={12} sm={10}>
-					<div style={{ display: this.state.error ? "" : "none" }}>
+					<div style={{ display: error ? "" : "none" }}>
 						<InputLabel style={{ color: "red" }}>{this.state.error}</InputLabel>
 					</div>
 					<TextField
@@ -147,13 +147,16 @@ class NewPost extends Component {
 						fullWidth
 						autoComplete="blog"
 						onChange={this.handleChange("title")}
+						style={{ textTransform: "uppercase" }}
 					/>
 
 					<FormControl
 						required
 						style={{ width: 350, marginTop: 30, marginBottom: 30 }}
 					>
-						<InputLabel id="categories">Blog Category</InputLabel>
+						<InputLabel id="categories" style={{ textTransform: "uppercase" }}>
+							Blog Category
+						</InputLabel>
 
 						<Select
 							labelId="categories"
@@ -162,12 +165,14 @@ class NewPost extends Component {
 							value={category}
 							onChange={this.handleChange("category")}
 						>
-							{this.state.teams.map(cat => (
-								<MenuItem value={cat._id}>{cat.name}</MenuItem>
+							{teams.map(cat => (
+								<MenuItem key={cat._id}>{cat.name}</MenuItem>
 							))}
 						</Select>
 					</FormControl>
-					<InputLabel id="photo">Blog Image</InputLabel>
+					<InputLabel id="photo" style={{ textTransform: "uppercase" }}>
+						Blog Image
+					</InputLabel>
 					<Input
 						type="file"
 						id="photo"
@@ -188,6 +193,7 @@ class NewPost extends Component {
 						rows={10}
 						rowsMax={20}
 						onChange={this.handleChange("body")}
+						style={{ textTransform: "uppercase" }}
 					/>
 					<Button
 						variant="contained"
@@ -272,7 +278,7 @@ class NewPost extends Component {
 
 				{/* <select onChange={this.handleChange("category")}>{optionItems}</select> */}
 
-				{this.newPostForm(title, category, body)}
+				{this.newPostForm(title, category, body, teams, error)}
 			</div>
 		);
 	}

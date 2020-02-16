@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { isAuthenticated } from "./Auth";
+import { isAuthenticated } from "../Auth";
 import { create } from "./apiCategory";
-import { Redirect } from "react-router-dom";
 
 class Category extends Component {
 	constructor() {

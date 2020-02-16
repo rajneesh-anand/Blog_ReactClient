@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { singlePost, remove, like, unlike } from "./apiPost";
-import DefaultPost from "./images/mountains.jpg";
+import { singlePost, remove, like, unlike } from "./ApiPost";
+import DefaultPost from "../Images/mountains.jpg";
 import { Link, Redirect } from "react-router-dom";
-import { isAuthenticated } from "./Auth";
+import { isAuthenticated } from "../Auth";
 import Comment from "./Comment";
 
 class SinglePost extends Component {

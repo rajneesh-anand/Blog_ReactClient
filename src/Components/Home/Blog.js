@@ -6,13 +6,11 @@ import Container from "@material-ui/core/Container";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import TwitterIcon from "@material-ui/icons/Twitter";
-import Header from "./Header";
+
 import MainFeaturedPost from "./MainFeaturedPost";
-import FeaturedPost from "./FeaturedPost";
-// import Main from "./Main";
+import FeaturedPost from "../Posts/FeaturedPost";
 import Sidebar from "./Sidebar";
-import Footer from "./Footer";
-import Posts from "./Posts";
+import Posts from "../Posts/Posts";
 
 const useStyles = makeStyles(theme => ({
 	mainGrid: {
@@ -101,10 +99,6 @@ export default function Blog() {
 					</Grid>
 				</main>
 			</Container>
-			<Footer
-				title="Footer"
-				description="Something here to give the footer a purpose!"
-			/>
 		</React.Fragment>
 	);
 }

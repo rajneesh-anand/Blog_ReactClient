@@ -1,8 +1,42 @@
-import React, { Component } from "react";
-import { isAuthenticated } from "./Auth";
+import React, { Component, Fragment } from "react";
+import { isAuthenticated } from "../Auth";
 import { read, update, updateUser } from "./apiUser";
 import { Redirect } from "react-router-dom";
-import DefaultProfile from "./images/avatar.jpg";
+import DefaultProfile from "../Images/avatar.jpg";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import Avatar from "@material-ui/core/Avatar";
+import Input from "@material-ui/core/Input";
+import Grid from "@material-ui/core/Grid";
+import { findByLabelText } from "@testing-library/react";
+
+const styles = theme => ({
+	root: {
+		background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+		border: 0,
+		borderRadius: 3,
+		boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+		color: "white",
+		height: 48,
+		padding: "0 30px",
+
+		margin: theme.spacing(1)
+	},
+	large: {
+		width: theme.spacing(10),
+		height: theme.spacing(10)
+	},
+	elm: {
+		padding: "8px",
+		fontFamily: [
+			"Nunito",
+			"Roboto",
+			'"Helvetica Neue"',
+			"Arial",
+			"sans-serif"
+		].join(",")
+	}
+});
 
 class EditProfile extends Component {
 	constructor() {
@@ -109,59 +143,64 @@ class EditProfile extends Component {
 		}
 	};
 
-	signupForm = (name, email, password, about) => (
-		<form>
-			<div className="form-group">
-				<label className="text-muted">Profile Photo</label>
-				<input
+	signupForm = (name, email, password, about, classes, photoUrl) => (
+		<Fragment>
+			<Grid item xs={12} md={6} align="center">
+				<Avatar alt={name} src={photoUrl} className={classes.large} />
+				<Input
+					type="file"
+					id="photo"
 					onChange={this.handleChange("photo")}
 					type="file"
 					accept="image/*"
-					className="form-control"
+					disableUnderline
 				/>
-			</div>
-			<div className="form-group">
-				<label className="text-muted">Name</label>
-				<input
-					onChange={this.handleChange("name")}
-					type="text"
-					className="form-control"
-					value={name}
-				/>
-			</div>
-			<div className="form-group">
-				<label className="text-muted">Email</label>
-				<input
-					onChange={this.handleChange("email")}
-					type="email"
-					className="form-control"
-					value={email}
-				/>
-			</div>
-
-			<div className="form-group">
-				<label className="text-muted">About</label>
-				<textarea
-					onChange={this.handleChange("about")}
-					type="text"
-					className="form-control"
-					value={about}
-				/>
-			</div>
-
-			<div className="form-group">
-				<label className="text-muted">Password</label>
-				<input
-					onChange={this.handleChange("password")}
-					type="password"
-					className="form-control"
-					value={password}
-				/>
-			</div>
-			<button onClick={this.clickSubmit} className="btn btn-raised btn-primary">
-				Update
-			</button>
-		</form>
+				<div className={classes.elm} display="flex">
+					<label style={{ paddingRight: "10px", color: "#668cff" }}>Name</label>
+					<Input
+						onChange={this.handleChange("name")}
+						type="text"
+						value={name}
+						disableUnderline
+					/>
+				</div>
+				<div className={classes.elm} display="flex">
+					<label style={{ paddingRight: "10px", color: "#668cff" }}>
+						Email
+					</label>
+					<Input
+						onChange={this.handleChange("email")}
+						type="email"
+						value={email}
+						disableUnderline
+					/>
+				</div>
+				<div className={classes.elm} display="flex">
+					<label style={{ paddingRight: "10px", color: "#668cff" }}>
+						About
+					</label>
+					<Input
+						onChange={this.handleChange("about")}
+						type="text"
+						value={about}
+						multiline
+						disableUnderline
+					/>
+				</div>
+				<div className={classes.elm}>
+					<label style={{ paddingRight: "10px", color: "#668cff" }}>
+						Password
+					</label>
+					<Input
+						onChange={this.handleChange("password")}
+						type="password"
+						value={password}
+						disableUnderline
+					/>
+				</div>
+				<button onClick={this.clickSubmit}>Update</button>
+			</Grid>
+		</Fragment>
 	);
 
 	render() {
@@ -176,6 +215,8 @@ class EditProfile extends Component {
 			about
 		} = this.state;
 
+		const { classes } = this.props;
+
 		if (redirectToProfile) {
 			return <Redirect to={`/user/${id}`} />;
 		}
@@ -187,8 +228,7 @@ class EditProfile extends Component {
 			: DefaultProfile;
 
 		return (
-			<div className="container">
-				<h2 className="mt-5 mb-5">Edit Profile</h2>
+			<Grid container justify="center" style={{ marginTop: "16px" }}>
 				<div
 					className="alert alert-danger"
 					style={{ display: error ? "" : "none" }}
@@ -204,22 +244,22 @@ class EditProfile extends Component {
 					""
 				)}
 
-				<img
+				{/* <img
 					style={{ height: "200px", width: "auto" }}
 					className="img-thumbnail"
 					src={photoUrl}
 					onError={i => (i.target.src = `${DefaultProfile}`)}
 					alt={name}
-				/>
+				/> */}
 
 				{isAuthenticated().user.role === "admin" &&
-					this.signupForm(name, email, password, about)}
+					this.signupForm(name, email, password, about, classes, photoUrl)}
 
 				{isAuthenticated().user._id === id &&
-					this.signupForm(name, email, password, about)}
-			</div>
+					this.signupForm(name, email, password, about, classes, photoUrl)}
+			</Grid>
 		);
 	}
 }
 
-export default EditProfile;
+export default withStyles(styles)(EditProfile);

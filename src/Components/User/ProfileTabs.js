@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import DefaultProfile from "./images/avatar.jpg";
+import DefaultProfile from "../Images/avatar.jpg";
 import Grid from "@material-ui/core/Grid";
 
 class ProfileTabs extends Component {
@@ -8,7 +8,7 @@ class ProfileTabs extends Component {
 		const { following, followers, posts } = this.props;
 		return (
 			<React.Fragment>
-				<Grid container spacing={3}>
+				<Grid container>
 					<Grid item xs={12} sm={6}>
 						<h3>{followers.length} Followers</h3>
 

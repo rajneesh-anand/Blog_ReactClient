@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { comment, uncomment } from "./apiPost";
-import { isAuthenticated } from "./Auth";
+import { comment, uncomment } from "../Posts/apiPost";
+import { isAuthenticated } from "../Auth";
 import { Link } from "react-router-dom";
-import DefaultProfile from "./images/avatar.jpg";
+import DefaultProfile from "../Images/avatar.jpg";
 
 class Comment extends Component {
 	state = {

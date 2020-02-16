@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import { isAuthenticated } from "./Auth";
+import { isAuthenticated } from "../Auth";
 import { remove } from "./apiUser";
-import { signout } from "./Auth";
+import { signout } from "../Auth";
 import Button from "@material-ui/core/Button";
 
 class DeleteUser extends Component {

@@ -1,43 +1,27 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import { signin, authenticate } from "./Auth";
-import Avatar from "@material-ui/core/Avatar";
+import { signup } from "../Auth";
+
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+
 import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
+
 import Container from "@material-ui/core/Container";
-import { red } from "@material-ui/core/colors";
 
-function Copyright() {
-	return (
-		<Typography variant="body2" color="textSecondary" align="center">
-			{"Copyright © "}
-			<Link color="inherit" href="https://thefunfacts.club">
-				www.thefunfacts.club
-			</Link>{" "}
-			{new Date().getFullYear()}
-			{"."}
-		</Typography>
-	);
-}
-
-class Signin extends Component {
+class Signup extends Component {
 	constructor() {
 		super();
 		this.state = {
+			name: "",
 			email: "",
 			password: "",
 			error: "",
-			redirectToReferer: false,
-			loading: false,
+			open: false,
 			recaptcha: false
 		};
 	}
@@ -81,37 +65,39 @@ class Signin extends Component {
 
 	clickSubmit = event => {
 		event.preventDefault();
-		this.setState({ loading: true });
-		const { email, password } = this.state;
+		const { name, email, password } = this.state;
 		const user = {
+			name,
 			email,
 			password
 		};
-
+		console.log(user);
 		if (this.state.recaptcha) {
-			signin(user).then(data => {
+			signup(user).then(data => {
 				if (data.error) {
-					this.setState({ error: data.error, loading: false });
-				} else {
-					authenticate(data, () => {
-						this.setState({ redirectToReferer: true });
+					this.setState({ error: data.error });
+					console.log(data.error);
+				} else
+					this.setState({
+						error: "",
+						name: "",
+						email: "",
+						password: "",
+						open: true
 					});
-				}
 			});
 		} else {
 			this.setState({
-				loading: false,
 				error: "What day is today? Please write a correct answer!"
 			});
 		}
 	};
-
-	signinForm = (email, password, recaptcha) => (
+	signupForm = (name, email, password, recaptcha) => (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />
-			<div style={{ marginTop: 15 }}>
+			<div className={this.props.paper} style={{ marginTop: 15 }}>
 				<Typography component="h1" variant="h5" align="center">
-					Sign In
+					Sign up
 				</Typography>
 
 				<form className={this.props.form} noValidate>
@@ -126,7 +112,37 @@ class Signin extends Component {
 								{this.state.error}
 							</div>
 						</Grid>
-
+						<Grid item item xs={12}>
+							<div style={{ display: this.state.open ? "" : "none" }}>
+								New account is successfully created. Please{" "}
+								<Link href="/signin">Sign In</Link>.
+							</div>
+						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								autoComplete="fname"
+								name="firstName"
+								variant="outlined"
+								required
+								fullWidth
+								id="firstName"
+								label="Full Name"
+								autoFocus
+								onChange={this.handleChange("name")}
+								value={name}
+							/>
+						</Grid>
+						{/* <Grid item xs={12} sm={6}>
+				<TextField
+				  variant="outlined"
+				  required
+				  fullWidth
+				  id="lastName"
+				  label="Last Name"
+				  name="lastName"
+				  autoComplete="lname"
+				/>
+			  </Grid> */}
 						<Grid item xs={12}>
 							<TextField
 								variant="outlined"
@@ -193,45 +209,31 @@ class Signin extends Component {
 							className={this.props.submit}
 							onClick={this.clickSubmit}
 						>
-							Login
+							Sign Up
 						</Button>
 					</Grid>
 
 					<Grid container justify="flex-end">
 						<Grid item style={{ marginTop: 15 }}>
-							<Link href="/forgot-password" variant="body2">
-								Forgot Password
+							<Link href="/signin" variant="body2">
+								Already have an account? Sign in
 							</Link>
 						</Grid>
 					</Grid>
 				</form>
 			</div>
-			<Box mt={5}>
-				<Copyright />
-			</Box>
 		</Container>
 	);
 
 	render() {
-		const {
-			email,
-			password,
-			error,
-			redirectToReferer,
-			loading,
-			recaptcha
-		} = this.state;
-
-		if (redirectToReferer) {
-			return <Redirect to="/" />;
-		}
+		const { name, email, password, error, open, recaptcha } = this.state;
 
 		return (
 			<React.Fragment>
-				{this.signinForm(email, password, recaptcha)}
+				{this.signupForm(name, email, password, recaptcha)}
 			</React.Fragment>
 		);
 	}
 }
 
-export default Signin;
+export default Signup;

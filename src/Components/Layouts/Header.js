@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import Typography from "@material-ui/core/Typography";
 import { Link, withRouter } from "react-router-dom";
-import { signout, isAuthenticated } from "./Auth";
+import { signout, isAuthenticated } from "../Auth";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import AppBar from "@material-ui/core/AppBar";
@@ -43,13 +43,13 @@ const sections = [
 ];
 
 const isActive = (history, path) => {
-	// console.log(`history = ${history.location.pathname} and path = ${path}`);
 	if (history.location.pathname === path) return { color: "blue" };
 	else return { color: "black" };
 };
 
 const Header = ({ history }) => {
 	const [anchorEl, setAnchorEl] = React.useState(null);
+
 	const handleClick = event => {
 		setAnchorEl(event.currentTarget);
 	};
@@ -75,38 +75,37 @@ const Header = ({ history }) => {
 					align="center"
 					className={classes.toolbarTitle}
 				>
-					Blog
+					<Link style={isActive(history, "/")} to="/">
+						Blog
+					</Link>
 				</Typography>
 				<IconButton>
 					<SearchIcon />
 				</IconButton>
-				<Fragment>
-					<Link style={isActive(history, "/")} to="/"></Link>
-				</Fragment>
-				<Fragment>
-					{!isAuthenticated() && (
-						<Fragment>
-							<Button
-								component={Link}
-								style={isActive(history, "/signup")}
-								to="/signup"
-							>
-								REGISTER
-							</Button>
-							<Button
-								component={Link}
-								style={isActive(history, "/signin")}
-								to="/signin"
-								onClick={changeEvent}
-							>
-								LOGIN
-							</Button>
-						</Fragment>
-					)}
 
-					{isAuthenticated() && (
-						<div>
-							{/* 
+				{!isAuthenticated() && (
+					<Fragment>
+						<Button
+							component={Link}
+							style={isActive(history, "/signup")}
+							to="/signup"
+						>
+							REGISTER
+						</Button>
+						<Button
+							component={Link}
+							style={isActive(history, "/signin")}
+							to="/signin"
+							onClick={changeEvent}
+						>
+							LOGIN
+						</Button>
+					</Fragment>
+				)}
+
+				{isAuthenticated() && (
+					<Fragment>
+						{/* 
 						<Button
                             to={`/user/${isAuthenticated().user._id}`}
                             style={isActive(history, `/user/${isAuthenticated().user._id}`)}
@@ -115,54 +114,54 @@ const Header = ({ history }) => {
                             {` Welcome ${isAuthenticated().user.name}`}
                         </Button> */}
 
-							<Button
-								style={{ alignContent: "flex-end" }}
-								aria-controls="simple-menu"
-								aria-haspopup="true"
-								onClick={handleClick}
-							>
-								{` Welcome ${isAuthenticated().user.name}`}
-							</Button>
-							<Menu
-								id="simple-menu"
-								anchorEl={anchorEl}
-								keepMounted
-								open={Boolean(anchorEl)}
-								onClose={handleClose}
-							>
-								<MenuItem onClick={handleClose}>Profile</MenuItem>
-								<MenuItem onClick={handleClose}>
-									<Button
-										component={Link}
-										to={`/user/${isAuthenticated().user._id}`}
-										style={isActive(
-											history,
-											`/user/${isAuthenticated().user._id}`
-										)}
-									>
-										My Profile
-									</Button>
-								</MenuItem>
-								<MenuItem>
-									<Button
-										style={{ cursor: "pointer", color: "red" }}
-										onClick={() => signout(() => history.push("/"))}
-									>
-										Sign Out
-									</Button>
-								</MenuItem>
-							</Menu>
-						</div>
+						<Button
+							style={{ alignContent: "flex-end" }}
+							aria-controls="simple-menu"
+							aria-haspopup="true"
+							onClick={handleClick}
+						>
+							{` Welcome ${isAuthenticated().user.name}`}
+						</Button>
+						<Menu
+							id="simple-menu"
+							anchorEl={anchorEl}
+							keepMounted
+							open={Boolean(anchorEl)}
+							onClose={handleClose}
+						>
+							<MenuItem onClick={handleClose}>Profile</MenuItem>
+							<MenuItem onClick={handleClose}>
+								<Button
+									component={Link}
+									to={`/user/${isAuthenticated().user._id}`}
+									style={isActive(
+										history,
+										`/user/${isAuthenticated().user._id}`
+									)}
+								>
+									My Profile
+								</Button>
+							</MenuItem>
+							<MenuItem>
+								<Button
+									style={{ cursor: "pointer", color: "red" }}
+									onClick={() => signout(() => history.push("/"))}
+								>
+									Sign Out
+								</Button>
+							</MenuItem>
+						</Menu>
+					</Fragment>
 
-						// <Button
-						// 	style={{ cursor: "pointer", color: "red" }}
-						// 	onClick={() => signout(() => history.push("/"))}
-						// >
-						// 	Sign Out
-						// </Button>
-					)}
-				</Fragment>
+					// <Button
+					// 	style={{ cursor: "pointer", color: "red" }}
+					// 	onClick={() => signout(() => history.push("/"))}
+					// >
+					// 	Sign Out
+					// </Button>
+				)}
 			</Toolbar>
+
 			<AppBar position="sticky" color="default">
 				<Toolbar
 					component="nav"

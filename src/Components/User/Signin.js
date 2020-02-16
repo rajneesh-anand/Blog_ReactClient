@@ -1,62 +1,24 @@
 import React, { Component } from "react";
-import { signup } from "./Auth";
-import Avatar from "@material-ui/core/Avatar";
+import { Redirect } from "react-router-dom";
+import { signin, authenticate } from "../Auth";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+
 import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { red } from "@material-ui/core/colors";
 
-function Copyright() {
-	return (
-		<Typography variant="body2" color="textSecondary" align="center">
-			{"Copyright © "}
-			<Link color="inherit" href="https://thefunfacts.club">
-				www.thefunfacts.club
-			</Link>{" "}
-			{new Date().getFullYear()}
-			{"."}
-		</Typography>
-	);
-}
-
-const useStyles = theme => ({
-	paper: {
-		marginTop: theme.spacing(7),
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "center"
-	},
-	avatar: {
-		margin: theme.spacing(1),
-		backgroundColor: theme.palette.secondary.main
-	},
-	form: {
-		width: "100%", // Fix IE 11 issue.
-		marginTop: theme.spacing(3)
-	},
-	submit: {
-		margin: theme.spacing(3, 0, 2)
-	}
-});
-
-class Signup extends Component {
+class Signin extends Component {
 	constructor() {
 		super();
 		this.state = {
-			name: "",
 			email: "",
 			password: "",
 			error: "",
-			open: false,
+			redirectToReferer: false,
+			loading: false,
 			recaptcha: false
 		};
 	}
@@ -100,39 +62,37 @@ class Signup extends Component {
 
 	clickSubmit = event => {
 		event.preventDefault();
-		const { name, email, password } = this.state;
+		this.setState({ loading: true });
+		const { email, password } = this.state;
 		const user = {
-			name,
 			email,
 			password
 		};
-		console.log(user);
+
 		if (this.state.recaptcha) {
-			signup(user).then(data => {
+			signin(user).then(data => {
 				if (data.error) {
-					this.setState({ error: data.error });
-					console.log(data.error);
-				} else
-					this.setState({
-						error: "",
-						name: "",
-						email: "",
-						password: "",
-						open: true
+					this.setState({ error: data.error, loading: false });
+				} else {
+					authenticate(data, () => {
+						this.setState({ redirectToReferer: true });
 					});
+				}
 			});
 		} else {
 			this.setState({
+				loading: false,
 				error: "What day is today? Please write a correct answer!"
 			});
 		}
 	};
-	signupForm = (name, email, password, recaptcha) => (
+
+	signinForm = (email, password, recaptcha) => (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />
-			<div className={this.props.paper} style={{ marginTop: 15 }}>
+			<div style={{ marginTop: 15 }}>
 				<Typography component="h1" variant="h5" align="center">
-					Sign up
+					Sign In
 				</Typography>
 
 				<form className={this.props.form} noValidate>
@@ -147,37 +107,7 @@ class Signup extends Component {
 								{this.state.error}
 							</div>
 						</Grid>
-						<Grid item item xs={12}>
-							<div style={{ display: this.state.open ? "" : "none" }}>
-								New account is successfully created. Please{" "}
-								<Link href="/signin">Sign In</Link>.
-							</div>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								autoComplete="fname"
-								name="firstName"
-								variant="outlined"
-								required
-								fullWidth
-								id="firstName"
-								label="Full Name"
-								autoFocus
-								onChange={this.handleChange("name")}
-								value={name}
-							/>
-						</Grid>
-						{/* <Grid item xs={12} sm={6}>
-				<TextField
-				  variant="outlined"
-				  required
-				  fullWidth
-				  id="lastName"
-				  label="Last Name"
-				  name="lastName"
-				  autoComplete="lname"
-				/>
-			  </Grid> */}
+
 						<Grid item xs={12}>
 							<TextField
 								variant="outlined"
@@ -216,10 +146,6 @@ class Signup extends Component {
 								label="What day is Today ?"
 								onChange={this.recaptchaHandler}
 							/>
-
-							{/* <FormControlLabel
-								label={recaptcha ? "Thanks. You got it!" : "What day is today?"}
-							/> */}
 						</Grid>
 						<Grid item item xs={12}>
 							<div
@@ -244,34 +170,42 @@ class Signup extends Component {
 							className={this.props.submit}
 							onClick={this.clickSubmit}
 						>
-							Sign Up
+							Login
 						</Button>
 					</Grid>
 
 					<Grid container justify="flex-end">
 						<Grid item style={{ marginTop: 15 }}>
-							<Link href="/signin" variant="body2">
-								Already have an account? Sign in
+							<Link href="/forgot-password" variant="body2">
+								Forgot Password
 							</Link>
 						</Grid>
 					</Grid>
 				</form>
 			</div>
-			<Box mt={5}>
-				<Copyright />
-			</Box>
 		</Container>
 	);
 
 	render() {
-		const { name, email, password, error, open, recaptcha } = this.state;
+		const {
+			email,
+			password,
+			error,
+			redirectToReferer,
+			loading,
+			recaptcha
+		} = this.state;
+
+		if (redirectToReferer) {
+			return <Redirect to="/" />;
+		}
 
 		return (
 			<React.Fragment>
-				{this.signupForm(name, email, password, recaptcha)}
+				{this.signinForm(email, password, recaptcha)}
 			</React.Fragment>
 		);
 	}
 }
 
-export default withStyles(useStyles)(Signup);
+export default Signin;
