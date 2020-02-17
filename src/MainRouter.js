@@ -13,6 +13,7 @@ import EditProfile from "./Components/User/EditProfile";
 import Admin from "./Components/Admin";
 import Technology from "./Components/Technology";
 import Design from "./Components/Design";
+import Travel from "./Components/Travel";
 
 const MainRouter = () => (
 	<div>
@@ -21,6 +22,7 @@ const MainRouter = () => (
 			<Route exact path="/" component={Home} />
 			<Route exact path="/posts/technology" component={Technology} />
 			<Route exact path="/posts/design" component={Design} />
+			<Route exact path="/posts/travel" component={Travel} />
 			<Route exact path="/signup" component={Signup} />
 			<Route exact path="/signin" component={Signin} />
 			<PrivateRoute exact path="/admin" component={Admin} />

@@ -1,9 +1,8 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { JssProvider } from "react-jss";
 import { createGenerateClassName } from "@material-ui/core/styles";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import SinglePostDetails from "./SinglePostDetails";
+import TravelCard from "./TravelCard";
 import Grid from "@material-ui/core/Grid";
 
 const muiBaseTheme = createMuiTheme();
@@ -12,8 +11,7 @@ const generateClassName = createGenerateClassName({
 	dangerouslyUseGlobalCSS: true
 });
 
-function SinglePost(props) {
-	const postId = props.match.params.postId;
+function TravelList(props) {
 	return (
 		<JssProvider generateClassName={generateClassName}>
 			<MuiThemeProvider
@@ -21,15 +19,17 @@ function SinglePost(props) {
 					typography: {
 						useNextVariants: true
 					},
-					overrides: SinglePostDetails.getTheme(muiBaseTheme)
+					overrides: TravelCard.getTheme(muiBaseTheme)
 				})}
 			>
-				<Grid container style={{ paddingTop: "15px" }} justify="center">
-					<SinglePostDetails postId={postId} />
+				<Grid container style={{ marginTop: "15px", marginBottom: "30px" }}>
+					{props.posts.map(post => (
+						<TravelCard key={post._id} post={post} />
+					))}
 				</Grid>
 			</MuiThemeProvider>
 		</JssProvider>
 	);
 }
 
-export default SinglePost;
+export default TravelList;
