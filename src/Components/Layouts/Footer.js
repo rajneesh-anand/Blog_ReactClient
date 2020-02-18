@@ -33,7 +33,7 @@ const Footer = props => {
 		<footer className={classes.footer}>
 			<Container maxWidth="lg">
 				<Typography align="center" gutterBottom>
-					{title}
+					{/* {title} */}
 				</Typography>
 				<Typography align="center">{description}</Typography>
 				<Copyright />

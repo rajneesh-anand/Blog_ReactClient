@@ -116,6 +116,7 @@ class Profile extends Component {
 									component={Link}
 									to={`/post/create`}
 									style={{ margin: 5 }}
+									size="small"
 								>
 									Create Post
 								</Button>
@@ -126,6 +127,7 @@ class Profile extends Component {
 									component={Link}
 									to={`/user/edit/${user._id}`}
 									style={{ margin: 5 }}
+									size="small"
 								>
 									Edit Profile
 								</Button>

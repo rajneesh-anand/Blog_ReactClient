@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { JssProvider } from "react-jss";
 import { createGenerateClassName } from "@material-ui/core/styles";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";

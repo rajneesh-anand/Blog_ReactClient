@@ -102,7 +102,7 @@ class Signup extends Component {
 
 				<form className={this.props.form} noValidate>
 					<Grid container spacing={2}>
-						<Grid item item xs={12}>
+						<Grid item xs={12}>
 							<div
 								style={{
 									display: this.state.error ? "" : "none",
@@ -112,7 +112,7 @@ class Signup extends Component {
 								{this.state.error}
 							</div>
 						</Grid>
-						<Grid item item xs={12}>
+						<Grid item xs={12}>
 							<div style={{ display: this.state.open ? "" : "none" }}>
 								New account is successfully created. Please{" "}
 								<Link href="/signin">Sign In</Link>.

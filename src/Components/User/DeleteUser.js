@@ -43,6 +43,7 @@ class DeleteUser extends Component {
 				onClick={this.deleteConfirmed}
 				variant="contained"
 				color="secondary"
+				size="small"
 			>
 				Delete Profile
 			</Button>

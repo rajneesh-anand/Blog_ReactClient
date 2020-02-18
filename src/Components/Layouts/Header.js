@@ -10,14 +10,51 @@ import ListItem from "@material-ui/core/ListItem";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { signout, isAuthenticated } from "../Auth";
 import { Link, withRouter } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-
+import Divider from "@material-ui/core/Divider";
+import Avatar from "@material-ui/core/Avatar";
+import Grid from "@material-ui/core/Grid";
+import Footer from "./Footer";
 import SearchIcon from "@material-ui/icons/Search";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import PersonIcon from "@material-ui/icons/Person";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+
+const StyledMenu = withStyles({
+	paper: {
+		border: "1px solid #d3d4d5"
+	}
+})(props => (
+	<Menu
+		elevation={0}
+		getContentAnchorEl={null}
+		anchorOrigin={{
+			vertical: "bottom",
+			horizontal: "center"
+		}}
+		transformOrigin={{
+			vertical: "top",
+			horizontal: "center"
+		}}
+		{...props}
+	/>
+));
+
+const StyledMenuItem = withStyles(theme => ({
+	root: {
+		"&:focus": {
+			backgroundColor: "#99ccff",
+			"& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+				color: theme.palette.common.white
+			}
+		}
+	}
+}))(MenuItem);
 
 const drawerWidth = 256;
 
@@ -41,6 +78,10 @@ const useStyles = makeStyles(theme => ({
 		[theme.breakpoints.up("sm")]: {
 			display: "none"
 		}
+	},
+	large: {
+		width: theme.spacing(10),
+		height: theme.spacing(10)
 	},
 	toolbar: theme.mixins.toolbar,
 
@@ -87,42 +128,95 @@ const Header = ({ history }) => {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 
-	const classes = useStyles();
-
 	const handleClick = event => {
 		setAnchorEl(event.currentTarget);
-	};
-
-	const changeEvent = event => {
-		setAnchorEl(event.currentTarget ? false : true);
 	};
 
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
 
+	const changeEvent = event => {
+		setAnchorEl(event.currentTarget ? false : true);
+	};
+
 	function handleDrawerToggle() {
 		setMobileOpen(!mobileOpen);
 	}
 
+	const classes = useStyles();
+
 	const drawer = (
-		<div>
-			<List>
-				{sections.map(section => (
-					<ListItem color="inherit" key={section.title}>
-						<Button component={Link} size="small" to={section.url}>
-							{section.title}
-						</Button>
-					</ListItem>
-				))}
-			</List>
-		</div>
+		<Fragment>
+			<Grid container style={{ justifyContent: "center" }} direction="column">
+				<Grid item align="center" style={{ paddingTop: "10px" }}>
+					{isAuthenticated() && (
+						<Fragment>
+							<Avatar
+								alt={isAuthenticated().user.name}
+								src={`${process.env.REACT_APP_API_URL}/user/photo/${
+									isAuthenticated().user._id
+								}`}
+								className={classes.large}
+							/>
+							<h3>{` Hi ${isAuthenticated().user.name}`}</h3>
+							<Button
+								component={Link}
+								to={`/user/${isAuthenticated().user._id}`}
+								style={isActive(history, `/user/${isAuthenticated().user._id}`)}
+							>
+								My PAGE
+							</Button>
+							<Button
+								style={{ cursor: "pointer" }}
+								onClick={() => signout(() => history.push("/"))}
+							>
+								Sign Out
+							</Button>
+						</Fragment>
+					)}
+
+					{!isAuthenticated() && (
+						<Fragment>
+							<Button
+								component={Link}
+								style={isActive(history, "/signup")}
+								to="/signup"
+							>
+								REGISTER
+							</Button>
+							<Button
+								component={Link}
+								style={isActive(history, "/signin")}
+								to="/signin"
+								onClick={changeEvent}
+							>
+								LOGIN
+							</Button>
+						</Fragment>
+					)}
+				</Grid>
+
+				<Divider />
+				<Grid item align="center">
+					<List>
+						{sections.map(section => (
+							<ListItem color="inherit" key={section.title}>
+								<Button component={Link} size="small" to={section.url}>
+									{section.title}
+								</Button>
+							</ListItem>
+						))}
+					</List>
+				</Grid>
+			</Grid>
+			<Footer />
+		</Fragment>
 	);
 
 	return (
 		<React.Fragment>
 			<CssBaseline />
-
 			<Toolbar className={classes.toolbar}>
 				<IconButton
 					color="inherit"
@@ -146,7 +240,7 @@ const Header = ({ history }) => {
 					className={classes.toolbarTitle}
 				>
 					<Link style={isActive(history, "/")} to="/">
-						Blog
+						<h3 className="logo">E | FLOW</h3>
 					</Link>
 				</Typography>
 
@@ -155,7 +249,7 @@ const Header = ({ history }) => {
 				</IconButton>
 
 				{!isAuthenticated() && (
-					<Fragment>
+					<Hidden smDown>
 						<Button
 							component={Link}
 							style={isActive(history, "/signup")}
@@ -171,28 +265,32 @@ const Header = ({ history }) => {
 						>
 							LOGIN
 						</Button>
-					</Fragment>
+					</Hidden>
 				)}
 				{isAuthenticated() && (
-					<Fragment>
+					<Hidden smDown>
 						<Button
-							style={{ alignContent: "flex-end" }}
-							aria-controls="simple-menu"
+							aria-controls="customized-menu"
 							aria-haspopup="true"
+							// variant="contained"
+							// color="primary"
 							onClick={handleClick}
 						>
-							{` Welcome ${isAuthenticated().user.name}`}
+							{` Hi ${isAuthenticated().user.name}`}
 						</Button>
-						<Menu
-							id="simple-menu"
+						<StyledMenu
+							id="customized-menu"
 							anchorEl={anchorEl}
 							keepMounted
 							open={Boolean(anchorEl)}
 							onClose={handleClose}
 						>
-							<MenuItem onClick={handleClose}>Profile</MenuItem>
-							<MenuItem onClick={handleClose}>
+							<StyledMenuItem>
+								<ListItemIcon>
+									<PersonIcon fontSize="small" />
+								</ListItemIcon>
 								<Button
+									size="small"
 									component={Link}
 									to={`/user/${isAuthenticated().user._id}`}
 									style={isActive(
@@ -200,19 +298,31 @@ const Header = ({ history }) => {
 										`/user/${isAuthenticated().user._id}`
 									)}
 								>
-									My Profile
+									Profile
 								</Button>
-							</MenuItem>
-							<MenuItem>
+								{/* <ListItemText fontSize="small" primary="Profile" /> */}
+							</StyledMenuItem>
+							<StyledMenuItem>
+								<ListItemIcon>
+									<ExitToAppIcon fontSize="small" />
+								</ListItemIcon>
 								<Button
-									style={{ cursor: "pointer", color: "red" }}
+									style={{ cursor: "pointer" }}
+									size="small"
 									onClick={() => signout(() => history.push("/"))}
 								>
 									Sign Out
 								</Button>
-							</MenuItem>
-						</Menu>
-					</Fragment>
+								{/* <ListItemText primary="Drafts" /> */}
+							</StyledMenuItem>
+							{/* <StyledMenuItem>
+									<ListItemIcon>
+										<InboxIcon fontSize="small" />
+									</ListItemIcon>
+									<ListItemText primary="Inbox" />
+								</StyledMenuItem> */}
+						</StyledMenu>
+					</Hidden>
 				)}
 			</Toolbar>
 
@@ -221,7 +331,9 @@ const Header = ({ history }) => {
 					component="nav"
 					variant="dense"
 					className={classes.toolbarSecondary}
-					style={{ position: "sticky" }}
+					// position="sticky"
+					// className={classes.toolbar}
+					// style={{ position: "sticky" }}
 				>
 					{sections.map(section => (
 						<Button
