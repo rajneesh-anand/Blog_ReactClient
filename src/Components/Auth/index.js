@@ -14,6 +14,8 @@ export const signup = user => {
 };
 
 export const signin = user => {
+	console.log(JSON.stringify(user));
+
 	return fetch(`${process.env.REACT_APP_API_URL}/signin`, {
 		method: "POST",
 		headers: {

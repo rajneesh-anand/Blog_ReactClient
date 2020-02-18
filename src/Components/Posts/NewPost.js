@@ -84,6 +84,7 @@ class NewPost extends Component {
 
 	handleChange = name => event => {
 		this.setState({ error: "" });
+		console.log(`${name} == ${event.target.value}`);
 
 		// const category = this.state.teams.find(u => u.name === event.target.value);
 
@@ -164,9 +165,12 @@ class NewPost extends Component {
 							label="Blog Catetory"
 							value={category}
 							onChange={this.handleChange("category")}
+							style={{ width: "200px" }}
 						>
 							{teams.map(cat => (
-								<MenuItem key={cat._id}>{cat.name}</MenuItem>
+								<MenuItem key={cat._id} value={cat._id}>
+									{cat.name}
+								</MenuItem>
 							))}
 						</Select>
 					</FormControl>
