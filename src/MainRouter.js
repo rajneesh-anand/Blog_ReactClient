@@ -3,6 +3,8 @@ import { Route, Switch } from "react-router-dom";
 import Home from "./Components/Home/Blog";
 import Signup from "./Components/User/Signup";
 import Signin from "./Components/User/Signin";
+import ForgotPassword from "./Components/User/ForgotPassword";
+import ResetPassword from "./Components/User/ResetPassword";
 import Header from "./Components/Layouts/Header";
 import Footer from "./Components/Layouts/Footer";
 import Profile from "./Components/User/Profile";
@@ -25,6 +27,12 @@ const MainRouter = () => (
 			<Route exact path="/posts/travel" component={Travel} />
 			<Route exact path="/signup" component={Signup} />
 			<Route exact path="/signin" component={Signin} />
+			<Route exact path="/forgot-password" component={ForgotPassword} />
+			<Route
+				exact
+				path="/reset-password/:resetPasswordToken"
+				component={ResetPassword}
+			/>
 			<PrivateRoute exact path="/admin" component={Admin} />
 			<PrivateRoute exact path="/user/edit/:userId" component={EditProfile} />
 			<PrivateRoute exact path="/user/:userId" component={Profile} />

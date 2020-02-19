@@ -8,6 +8,8 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import SocialLogin from "./SocialLogin";
+import { Divider } from "@material-ui/core";
 
 class Signin extends Component {
 	constructor() {
@@ -95,8 +97,8 @@ class Signin extends Component {
 				</Typography>
 
 				<form className={this.props.form} noValidate>
-					<Grid container spacing={2}>
-						<Grid item item xs={12}>
+					<Grid container spacing={2} justify="space-between">
+						<Grid item xs={12}>
 							<div
 								style={{
 									display: this.state.error ? "" : "none",
@@ -147,7 +149,7 @@ class Signin extends Component {
 								onChange={this.recaptchaHandler}
 							/>
 						</Grid>
-						<Grid item item xs={12}>
+						<Grid item xs={12}>
 							<div
 								style={{
 									display: recaptcha ? "" : "none ",
@@ -156,32 +158,33 @@ class Signin extends Component {
 							></div>
 						</Grid>
 
-						{/* <Grid item xs={12}>
-							<FormControlLabel
-								control={<Checkbox value="allowExtraEmails" color="primary" />}
-								label="I want to receive inspiration, marketing promotions and updates via email."
-							/>
-						</Grid> */}
-						<Button
-							type="submit"
-							fullWidth
-							variant="contained"
-							color="primary"
-							className={this.props.submit}
-							onClick={this.clickSubmit}
+						<Grid
+							container
+							item
+							xs={12}
+							justify="space-between"
+							direction="row-reverse"
 						>
-							Login
-						</Button>
-					</Grid>
+							<Button
+								type="submit"
+								// fullWidth
+								variant="contained"
+								color="primary"
+								size="small"
+								// className={this.props.submit}
+								onClick={this.clickSubmit}
+							>
+								Login
+							</Button>
 
-					<Grid container justify="flex-end">
-						<Grid item style={{ marginTop: 15 }}>
 							<Link href="/forgot-password" variant="body2">
-								Forgot Password
+								Forgot Password ?
 							</Link>
 						</Grid>
 					</Grid>
 				</form>
+				<Divider style={{ margin: "10px 0px" }} />
+				<SocialLogin />
 			</div>
 		</Container>
 	);

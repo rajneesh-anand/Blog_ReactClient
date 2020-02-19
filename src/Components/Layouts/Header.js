@@ -210,7 +210,10 @@ const Header = ({ history }) => {
 					</List>
 				</Grid>
 			</Grid>
-			<Footer />
+			<Footer
+				title="Footer"
+				description="Something here to give the footer a purpose!"
+			/>
 		</Fragment>
 	);
 
@@ -283,7 +286,7 @@ const Header = ({ history }) => {
 							anchorEl={anchorEl}
 							keepMounted
 							open={Boolean(anchorEl)}
-							onClose={handleClose}
+							onClick={handleClose}
 						>
 							<StyledMenuItem>
 								<ListItemIcon>
