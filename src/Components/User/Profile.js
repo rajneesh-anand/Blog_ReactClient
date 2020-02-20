@@ -1,16 +1,25 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { isAuthenticated } from "../Auth";
 import { Redirect, Link } from "react-router-dom";
-import { read } from "./apiUser";
+import { read, list } from "./apiUser";
 import DefaultProfile from "../Images/avatar.jpg";
 import DeleteUser from "./DeleteUser";
 import FollowProfileButton from "./FollowProfileButton";
 import ProfileTabs from "./ProfileTabs";
-import { listByUser } from "../Posts/ApiPost";
+import { listByUser, remove } from "../Posts/ApiPost";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Admin from "../Admin";
 import { Typography } from "@material-ui/core";
+import MaterialTable from "material-table";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 
 class Profile extends Component {
 	constructor() {
@@ -81,6 +90,27 @@ class Profile extends Component {
 		this.init(userId);
 	}
 
+	deletePost = item => {
+		const postId = item._id;
+		console.log(postId);
+		const token = isAuthenticated().token;
+		remove(postId, token).then(data => {
+			if (data.error) {
+				console.log(data.error);
+			} else {
+				// this.setState({ redirectToHome: true });
+				this.loadPosts(item.postedBy._id);
+			}
+		});
+	};
+
+	deleteConfirmed(item) {
+		let answer = window.confirm("Are you sure you want to delete your post?");
+		if (answer) {
+			this.deletePost(item);
+		}
+	}
+
 	render() {
 		const { redirectToSignin, user, posts } = this.state;
 		if (redirectToSignin) return <Redirect to="/signin" />;
@@ -90,6 +120,33 @@ class Profile extends Component {
 					user._id
 			  }?${new Date().getTime()}`
 			: DefaultProfile;
+
+		const listItem = posts.map(item => {
+			return (
+				<ListItem key={item._id}>
+					<ListItemText>
+						<Link to={`/post/${item._id}`}>{item.title}</Link>
+					</ListItemText>
+					<Button onClick={this.deleteConfirmed.bind(this, item)}>
+						<DeleteIcon />
+					</Button>
+					<Button component={Link} to={`/post/edit/${item._id}`}>
+						<EditIcon />
+					</Button>
+					{/* <Link to={`/post/edit/${item._id}`}>Update Post</Link> */}
+				</ListItem>
+			);
+		});
+
+		const listNonLogin = posts.map(item => {
+			return (
+				<ListItem key={item._id}>
+					<ListItemText>
+						<Link to={`/post/${item._id}`}>{item.title}</Link>
+					</ListItemText>
+				</ListItem>
+			);
+		});
 
 		return (
 			<React.Fragment>
@@ -101,7 +158,7 @@ class Profile extends Component {
 							onError={i => (i.target.src = `${DefaultProfile}`)}
 							alt={user.name}
 						/>
-						<Typography>Hello {user.name}</Typography>
+						<Typography>{user.name}</Typography>
 						<Typography>Email: {user.email}</Typography>
 						<Typography>{`Joined ${new Date(
 							user.created
@@ -109,31 +166,41 @@ class Profile extends Component {
 
 						{isAuthenticated().user &&
 						isAuthenticated().user._id === user._id ? (
-							<div>
-								<Button
-									variant="contained"
-									color="primary"
-									component={Link}
-									to={`/post/create`}
-									style={{ margin: 5 }}
-									size="small"
-								>
-									Create Post
-								</Button>
+							<Fragment>
+								<div>
+									<Button
+										variant="contained"
+										color="primary"
+										component={Link}
+										to={`/post/create`}
+										style={{ margin: 5 }}
+										size="small"
+									>
+										Create Post
+									</Button>
 
-								<Button
-									variant="contained"
-									color="primary"
-									component={Link}
-									to={`/user/edit/${user._id}`}
-									style={{ margin: 5 }}
-									size="small"
-								>
-									Edit Profile
-								</Button>
+									<Button
+										variant="contained"
+										color="primary"
+										component={Link}
+										to={`/user/edit/${user._id}`}
+										style={{ margin: 5 }}
+										size="small"
+									>
+										Edit Profile
+									</Button>
 
-								<DeleteUser userId={user._id} />
-							</div>
+									<DeleteUser userId={user._id} />
+								</div>
+								<div>
+									<Typography>
+										{user.followers.length} Followers
+										<span style={{ paddingLeft: "15px" }}>
+											{user.following.length} Following
+										</span>
+									</Typography>
+								</div>
+							</Fragment>
 						) : (
 							<FollowProfileButton
 								following={this.state.following}
@@ -143,30 +210,30 @@ class Profile extends Component {
 					</Grid>
 
 					<Grid item xs={12} sm={8}>
-						<ProfileTabs
-							followers={user.followers}
-							following={user.following}
-							posts={posts}
-						/>
+						{isAuthenticated().user &&
+						isAuthenticated().user._id === user._id ? (
+							posts.length === 0 ? (
+								<div>
+									<Typography>Hello {user.name}</Typography>
+									<Typography>
+										You don't have any blogs.
+										<Link to={`/post/create`}>Write your first blog.</Link>
+									</Typography>
+								</div>
+							) : (
+								<List>{listItem}</List>
+							)
+						) : isAuthenticated().user.role === "admin" ? (
+							<List>{listItem}</List>
+						) : (
+							<List>{listNonLogin}</List>
+						)}
 					</Grid>
 				</Grid>
 
-				<Grid container spacing={1}>
-					<Grid item xs={12} sm={12}>
-						{isAuthenticated().user && isAuthenticated().user.role === "admin" && (
-							<div>
-								<Admin />
-								<h5>Admin</h5>
-								<p>Edit/Delete as an Admin</p>
-								<Link
-									className="btn btn-raised btn-success mr-5"
-									to={`/user/edit/${user._id}`}
-								>
-									Edit Profile
-								</Link>
-							</div>
-						)}
-					</Grid>
+				<Grid container style={{ marginTop: 16 }}>
+					{isAuthenticated().user &&
+						isAuthenticated().user.role === "admin" && <Admin />}
 				</Grid>
 			</React.Fragment>
 		);

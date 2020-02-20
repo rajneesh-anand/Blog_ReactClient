@@ -12,6 +12,7 @@ import PrivateRoute from "./Components/Auth/PrivateRoute";
 import NewPost from "./Components/Posts/NewPost";
 import SinglePost from "./Components/Posts/SinglePost";
 import EditProfile from "./Components/User/EditProfile";
+import EditPost from "./Components/Posts/EditPost";
 import Admin from "./Components/Admin";
 import Technology from "./Components/Technology";
 import Design from "./Components/Design";
@@ -35,6 +36,7 @@ const MainRouter = () => (
 			/>
 			<PrivateRoute exact path="/admin" component={Admin} />
 			<PrivateRoute exact path="/user/edit/:userId" component={EditProfile} />
+			<PrivateRoute exact path="/post/edit/:postId" component={EditPost} />
 			<PrivateRoute exact path="/user/:userId" component={Profile} />
 			<PrivateRoute exact path="/post/create" component={NewPost} />
 			<Route exact path="/post/:postId" component={SinglePost} />

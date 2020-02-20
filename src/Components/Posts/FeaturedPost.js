@@ -22,7 +22,12 @@ const useStyles = makeStyles({
 	}
 });
 
-export default function FeaturedPost(props) {
+const formatDate = string => {
+	let options = { year: "numeric", month: "short", day: "numeric" };
+	return new Date(string).toLocaleDateString([], options);
+};
+
+const FeaturedPost = props => {
 	const classes = useStyles();
 	const { post } = props;
 	const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
@@ -39,7 +44,7 @@ export default function FeaturedPost(props) {
 						</Typography>
 						<Typography variant="subtitle1" color="textSecondary">
 							Posted by <Link to={`${posterId}`}>{posterName} </Link>
-							on {new Date(post.created).toDateString()}
+							on {formatDate(post.created)}
 						</Typography>
 						<Typography variant="subtitle1" paragraph>
 							{post.body}
@@ -60,8 +65,10 @@ export default function FeaturedPost(props) {
 			{/* </CardActionArea> */}
 		</Grid>
 	);
-}
+};
 
 FeaturedPost.propTypes = {
 	post: PropTypes.object
 };
+
+export default FeaturedPost;

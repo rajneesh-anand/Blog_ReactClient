@@ -95,6 +95,11 @@ class SinglePostDetails extends Component {
 		}
 	};
 
+	formatDate = string => {
+		let options = { year: "numeric", month: "short", day: "numeric" };
+		return new Date(string).toLocaleDateString([], options);
+	};
+
 	renderPost = post => {
 		const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
 		const posterName = post.postedBy ? post.postedBy.name : " Unknown";
@@ -137,7 +142,7 @@ class SinglePostDetails extends Component {
 						<Typography variant={"caption"}>
 							{/* <Link block href={"javascript:;"} underline={"none"}> */}
 							posted by <Link to={`${posterId}`}>{posterName} </Link>
-							on {new Date(post.created).toDateString()}
+							on {this.formatDate(post.created)}
 							{/* </Link> */}
 						</Typography>
 						<div>

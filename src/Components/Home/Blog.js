@@ -89,14 +89,14 @@ export default function Blog() {
 					<Grid container spacing={4}>
 						<Posts />
 					</Grid>
-					<Grid container spacing={5} className={classes.mainGrid}>
-						{/* <Sidebar
+					{/* <Grid container spacing={5} className={classes.mainGrid}>
+						<Sidebar
 							title={sidebar.title}
 							description={sidebar.description}
 							archives={sidebar.archives}
 							social={sidebar.social}
-						/> */}
-					</Grid>
+						/>
+					</Grid> */}
 				</main>
 			</Container>
 		</React.Fragment>

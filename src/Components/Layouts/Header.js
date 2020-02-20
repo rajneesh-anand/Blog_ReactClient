@@ -138,10 +138,12 @@ const Header = ({ history }) => {
 
 	const changeEvent = event => {
 		setAnchorEl(event.currentTarget ? false : true);
+		setMobileOpen(mobileOpen ? true : false);
 	};
 
 	function handleDrawerToggle() {
-		setMobileOpen(!mobileOpen);
+		console.log(!mobileOpen);
+		setMobileOpen(!mobileOpen ? true : false);
 	}
 
 	const classes = useStyles();
@@ -163,6 +165,7 @@ const Header = ({ history }) => {
 							<Button
 								component={Link}
 								to={`/user/${isAuthenticated().user._id}`}
+								onClick={handleDrawerToggle}
 								style={isActive(history, `/user/${isAuthenticated().user._id}`)}
 							>
 								My PAGE
@@ -181,6 +184,7 @@ const Header = ({ history }) => {
 							<Button
 								component={Link}
 								style={isActive(history, "/signup")}
+								onClick={handleDrawerToggle}
 								to="/signup"
 							>
 								REGISTER
@@ -189,7 +193,7 @@ const Header = ({ history }) => {
 								component={Link}
 								style={isActive(history, "/signin")}
 								to="/signin"
-								onClick={changeEvent}
+								onClick={handleDrawerToggle}
 							>
 								LOGIN
 							</Button>
@@ -202,7 +206,12 @@ const Header = ({ history }) => {
 					<List>
 						{sections.map(section => (
 							<ListItem color="inherit" key={section.title}>
-								<Button component={Link} size="small" to={section.url}>
+								<Button
+									component={Link}
+									size="small"
+									to={section.url}
+									onClick={handleDrawerToggle}
+								>
 									{section.title}
 								</Button>
 							</ListItem>

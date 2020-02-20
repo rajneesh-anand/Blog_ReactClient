@@ -32,11 +32,15 @@ const Footer = props => {
 	return (
 		<footer className={classes.footer}>
 			<Container maxWidth="lg">
-				<Typography align="center" gutterBottom>
-					{/* {title} */}
-				</Typography>
+				<Typography gutterBottom></Typography>
 				<Typography align="center">{description}</Typography>
 				<Copyright />
+				<a href="/privacy" target="_blank" rel="noopener noreferrer">
+					Privacy
+				</a>
+				<a href="/contact" target="_blank" rel="noopener noreferrer">
+					Contact
+				</a>
 			</Container>
 		</footer>
 	);
