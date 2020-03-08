@@ -22,3 +22,27 @@ a {
 a:hover {
 	text-decoration: underline;
 }
+link {
+	text-decoration: none;
+}
+.MenuItem {
+	color: rgb(139, 29, 29);
+}
+.MenuItem.Mui-selected {
+	color: blue;
+}
+
+.MuiMenuItem-root {
+	width: auto;
+	overflow: hidden;
+	font-size: 1rem;
+	box-sizing: border-box;
+	min-height: 48px;
+
+	font-weight: 400;
+	line-height: 1.5;
+	padding-top: 6px;
+	white-space: nowrap;
+	letter-spacing: 0.00938em;
+	padding-bottom: 6px;
+}

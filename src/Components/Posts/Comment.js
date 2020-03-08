@@ -119,7 +119,6 @@ class Comment extends Component {
 											borderRadius: "50%",
 											border: "1px solid black"
 										}}
-										className="float-left mr-2"
 										height="30px"
 										width="30px"
 										onError={i => (i.target.src = `${DefaultProfile}`)}

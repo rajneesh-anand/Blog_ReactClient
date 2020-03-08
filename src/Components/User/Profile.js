@@ -1,21 +1,17 @@
 import React, { Component, Fragment } from "react";
 import { isAuthenticated } from "../Auth";
 import { Redirect, Link } from "react-router-dom";
-import { read, list } from "./apiUser";
+import { read } from "./apiUser";
 import DefaultProfile from "../Images/avatar.jpg";
 import DeleteUser from "./DeleteUser";
 import FollowProfileButton from "./FollowProfileButton";
-import ProfileTabs from "./ProfileTabs";
 import { listByUser, remove } from "../Posts/ApiPost";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Admin from "../Admin";
 import { Typography } from "@material-ui/core";
-import MaterialTable from "material-table";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -168,7 +164,7 @@ class Profile extends Component {
 						isAuthenticated().user._id === user._id ? (
 							<Fragment>
 								<div>
-									<Button
+									{/* <Button
 										variant="contained"
 										color="primary"
 										component={Link}
@@ -176,8 +172,8 @@ class Profile extends Component {
 										style={{ margin: 5 }}
 										size="small"
 									>
-										Create Post
-									</Button>
+										Write Post
+									</Button> */}
 
 									<Button
 										variant="contained"
@@ -230,7 +226,7 @@ class Profile extends Component {
 						)}
 					</Grid>
 				</Grid>
-
+				<Divider style={{ marginTop: "50px" }} />
 				<Grid container style={{ marginTop: 16 }}>
 					{isAuthenticated().user &&
 						isAuthenticated().user.role === "admin" && <Admin />}

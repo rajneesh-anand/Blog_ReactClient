@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import { Link } from "react-router-dom";
 import Speaker from "../Images/speaker1.jpg";
@@ -12,8 +11,10 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
-import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
+import GitHubIcon from "@material-ui/icons/GitHub";
+import FacebookIcon from "@material-ui/icons/Facebook";
+import TwitterIcon from "@material-ui/icons/Twitter";
 
 const useStyles = makeStyles(theme => ({
 	sidebarAboutBox: {
@@ -28,9 +29,32 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function Sidebar(props) {
+const sidebar = {
+	title: "About",
+	description:
+		"Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.",
+
+	sections: [
+		{ title: "Technology", url: "/posts/technology" },
+		{ title: "Design", url: "/posts/design" },
+		{ title: "Culture", url: "#" },
+		{ title: "Business", url: "#" },
+		{ title: "Politics", url: "#" },
+		{ title: "Opinion", url: "#" },
+		{ title: "Science", url: "#" },
+		{ title: "Health", url: "#" },
+		{ title: "Style", url: "#" },
+		{ title: "Travel", url: "/posts/travel" }
+	],
+	social: [
+		{ id: 1, name: "GitHub", icon: GitHubIcon },
+		{ id: 2, name: "Twitter", icon: TwitterIcon },
+		{ id: 3, name: "Facebook", icon: FacebookIcon }
+	]
+};
+
+function RightSidebar(props) {
 	const classes = useStyles();
-	const { archives, description, social, title, sections } = props;
 
 	return (
 		<>
@@ -63,7 +87,7 @@ export default function Sidebar(props) {
 
 			<Divider style={{ marginTop: "8px" }} />
 
-			{sections.map((element, index) => (
+			{sidebar.sections.map((element, index) => (
 				<Button
 					variant="contained"
 					color="primary"
@@ -76,27 +100,20 @@ export default function Sidebar(props) {
 				</Button>
 			))}
 
-			{/* <Paper elevation={0} className={classes.sidebarAboutBox}>
-				<Typography variant="h6" gutterBottom>
-					{title}
-				</Typography>
-				<Typography>{description}</Typography>
-				<img src={Speaker} alt="speaker" />
-			</Paper> */}
 			<Divider />
 
-			<Typography variant="h6" gutterBottom className={classes.sidebarSection}>
+			{/* <Typography variant="h6" gutterBottom className={classes.sidebarSection}>
 				Archives
 			</Typography>
 			{archives.map(archive => (
 				<Button display="block" href={archive.url} key={archive.id}>
 					{archive.title}
 				</Button>
-			))}
+			))} */}
 			<Typography variant="h6" gutterBottom className={classes.sidebarSection}>
 				Social
 			</Typography>
-			{social.map(network => (
+			{sidebar.social.map(network => (
 				<Button display="block" href="#" key={network.id}>
 					<Grid container direction="row" spacing={1} alignItems="center">
 						<Grid item>
@@ -110,9 +127,11 @@ export default function Sidebar(props) {
 	);
 }
 
-Sidebar.propTypes = {
+RightSidebar.propTypes = {
 	archives: PropTypes.array,
 	description: PropTypes.string,
 	social: PropTypes.array,
 	title: PropTypes.string
 };
+
+export default RightSidebar;

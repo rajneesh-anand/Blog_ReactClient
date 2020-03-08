@@ -13,6 +13,8 @@ const generateClassName = createGenerateClassName({
 
 function SinglePost(props) {
 	const postId = props.match.params.postId;
+	const slug = props.match.params.slug;
+	console.log(`postId = ${postId} slug=${slug}`);
 	return (
 		<JssProvider generateClassName={generateClassName}>
 			<MuiThemeProvider
@@ -23,8 +25,8 @@ function SinglePost(props) {
 					overrides: SinglePostDetails.getTheme(muiBaseTheme)
 				})}
 			>
-				<Grid container style={{ paddingTop: "15px" }} justify="center">
-					<SinglePostDetails postId={postId} />
+				<Grid container justify="center">
+					<SinglePostDetails postId={postId} slug={slug} />
 				</Grid>
 			</MuiThemeProvider>
 		</JssProvider>

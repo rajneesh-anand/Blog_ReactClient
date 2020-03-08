@@ -23,7 +23,9 @@ const MainRouter = () => (
 		<Header />
 		<Switch>
 			<Route exact path="/" component={Home} />
+
 			<Route exact path="/posts/technology" component={Technology} />
+
 			<Route exact path="/posts/design" component={Design} />
 			<Route exact path="/posts/travel" component={Travel} />
 			<Route exact path="/signup" component={Signup} />
@@ -39,12 +41,9 @@ const MainRouter = () => (
 			<PrivateRoute exact path="/post/edit/:postId" component={EditPost} />
 			<PrivateRoute exact path="/user/:userId" component={Profile} />
 			<PrivateRoute exact path="/post/create" component={NewPost} />
-			<Route exact path="/post/:postId" component={SinglePost} />
+			<Route exact path="/post/:postId/:slug" component={SinglePost} />
 		</Switch>
-		<Footer
-			title="Footer"
-			description="Something here to give the footer a purpose!"
-		/>
+		<Footer />
 	</div>
 );
 

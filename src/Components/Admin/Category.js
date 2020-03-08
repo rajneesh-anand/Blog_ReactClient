@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Auth";
 import { create } from "./apiCategory";
+import { Typography } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import { categoryList } from "./apiCategory";
 
 class Category extends Component {
 	constructor() {
@@ -10,8 +13,19 @@ class Category extends Component {
 			description: "",
 			error: "",
 			loading: false,
-			open: false
+			open: false,
+			categories: []
 		};
+	}
+
+	componentDidMount() {
+		categoryList().then(data => {
+			if (data.error) {
+				console.log(data.error);
+			} else {
+				this.setState({ categories: data });
+			}
+		});
 	}
 
 	isValid = () => {
@@ -21,8 +35,7 @@ class Category extends Component {
 			this.setState({ error: "All fields are required", loading: false });
 			return false;
 		}
-		console.log("name :", name);
-		console.log("description :", description);
+
 		return true;
 	};
 
@@ -63,7 +76,7 @@ class Category extends Component {
 
 	newCategoryForm = (name, description) => (
 		<form>
-			<div className="form-group">
+			<div>
 				<label className="text-muted">Title</label>
 				<input
 					onChange={this.handleChange("name")}
@@ -83,41 +96,31 @@ class Category extends Component {
 				/>
 			</div>
 
-			<button onClick={this.clickSubmit} className="btn btn-raised btn-primary">
-				Create Category
-			</button>
+			<button onClick={this.clickSubmit}>Create Category</button>
 		</form>
 	);
 
 	render() {
-		const { name, description, error, loading, open } = this.state;
+		const { name, description, error, categories, open } = this.state;
 
 		return (
-			<div className="container">
-				<h2 className="mt-5 mb-5">Create a new post</h2>
-				<div
-					className="alert alert-danger"
-					style={{ display: error ? "" : "none" }}
-				>
-					{error}
-				</div>
-
-				{loading ? (
-					<div className="jumbotron text-center">
-						<h2>Loading...</h2>
+			<>
+				<Grid item xs={12} sm={6}>
+					<div style={{ display: error ? "" : "none" }}>{error}</div>
+					<div style={{ display: open ? "" : "none" }}>
+						<Typography>Category Added</Typography>
 					</div>
-				) : (
-					""
-				)}
-				<div
-					className="alert alert-info"
-					style={{ display: open ? "" : "none" }}
-				>
-					category aaded
-				</div>
+					<div>{this.newCategoryForm(name, description)}</div>
+				</Grid>
 
-				{this.newCategoryForm(name, description)}
-			</div>
+				<Grid item xs={12} sm={6}>
+					{categories.map(element => (
+						<div key={element._id}>
+							<h5>{element.name}</h5>
+						</div>
+					))}
+				</Grid>
+			</>
 		);
 	}
 }

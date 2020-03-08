@@ -13,3 +13,20 @@ export const create = (category, token) => {
 		})
 		.catch(err => console.log(err));
 };
+
+export const categoryList = () => {
+	return (
+		fetch(`${process.env.REACT_APP_API_URL}/categories`, {
+			method: "GET"
+		})
+			.then(response => {
+				return response.json();
+			})
+			// .then(data => {
+			// 	return data.data;
+			// })
+			.catch(error => {
+				console.log(error);
+			})
+	);
+};

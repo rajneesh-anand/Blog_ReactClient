@@ -1,22 +1,10 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
-import GitHubIcon from "@material-ui/icons/GitHub";
-import FacebookIcon from "@material-ui/icons/Facebook";
-import TwitterIcon from "@material-ui/icons/Twitter";
-
 import MainFeaturedPost from "./MainFeaturedPost";
-import FeaturedPost from "../Posts/FeaturedPost";
-import Sidebar from "./Sidebar";
+// import LeftSidebar from "../Layouts/LeftSidebar";
 import Posts from "../Posts/Posts";
-
-const useStyles = makeStyles(theme => ({
-	mainGrid: {
-		marginTop: theme.spacing(3)
-	}
-}));
+// import RightSidebar from "../Layouts/RightSidebar";
 
 const mainFeaturedPost = {
 	title: "Title of a longer featured blog post",
@@ -27,78 +15,26 @@ const mainFeaturedPost = {
 	linkText: "Continue reading…"
 };
 
-const featuredPosts = [
-	{
-		title: "Featured post",
-		date: "Nov 12",
-		description:
-			"This is a wider card with supporting text below as a natural lead-in to additional content.",
-		image: "https://source.unsplash.com/random",
-		imageText: "Image Text"
-	},
-	{
-		title: "Post title",
-		date: "Nov 11",
-		description:
-			"This is a wider card with supporting text below as a natural lead-in to additional content.",
-		image: "https://source.unsplash.com/random",
-		imageText: "Image Text"
-	}
-];
-
-// const posts = [post1, post2, post3];
-
-const sidebar = {
-	title: "About",
-	description:
-		"Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.",
-	archives: [
-		{ id: 1, title: "March 2020", url: "#" },
-		{ id: 2, title: "February 2020", url: "#" },
-		{ id: 3, title: "January 2020", url: "#" },
-		{ id: 4, title: "November 1999", url: "#" },
-		{ id: 5, title: "October 1999", url: "#" },
-		{ id: 6, title: "September 1999", url: "#" },
-		{ id: 7, title: "August 1999", url: "#" },
-		{ id: 8, title: "July 1999", url: "#" },
-		{ id: 9, title: "June 1999", url: "#" },
-		{ id: 10, title: "May 1999", url: "#" },
-		{ id: 11, title: "April 1999", url: "#" }
-	],
-	social: [
-		{ id: 1, name: "GitHub", icon: GitHubIcon },
-		{ id: 2, name: "Twitter", icon: TwitterIcon },
-		{ id: 3, name: "Facebook", icon: FacebookIcon }
-	]
-};
-
 export default function Blog() {
-	const classes = useStyles();
-
 	return (
 		<React.Fragment>
 			<CssBaseline />
-			<Container maxWidth="lg">
-				<main>
+
+			<Grid container justify="center">
+				<Grid item xs={12} sm={12}>
 					<MainFeaturedPost post={mainFeaturedPost} />
-					<Grid container spacing={4}>
-						{featuredPosts.map(post => (
-							<FeaturedPost key={post.title} post={post} />
-						))}
-					</Grid>
-					<Grid container spacing={4}>
-						<Posts />
-					</Grid>
-					{/* <Grid container spacing={5} className={classes.mainGrid}>
-						<Sidebar
-							title={sidebar.title}
-							description={sidebar.description}
-							archives={sidebar.archives}
-							social={sidebar.social}
-						/>
-					</Grid> */}
-				</main>
-			</Container>
+				</Grid>
+
+				{/* <Grid item xs={12} sm={3}>
+					<LeftSidebar />
+				</Grid> */}
+				<Grid item xs={12} sm={10}>
+					<Posts />
+				</Grid>
+				{/* <Grid item xs={12} sm={3}>
+					<RightSidebar />
+				</Grid> */}
+			</Grid>
 		</React.Fragment>
 	);
 }

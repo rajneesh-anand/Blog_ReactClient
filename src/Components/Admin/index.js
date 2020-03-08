@@ -1,17 +1,24 @@
-import React, { Component, Fragment } from "react";
-import Posts from "../Posts/Posts";
-import Category from "./Category";
+import React, { Component } from "react";
+
+import CategoryList from "./CategoryList";
+
 import Users from "./Users";
 import { isAuthenticated } from "../Auth";
 import { Redirect } from "react-router-dom";
-import Avatar from "@material-ui/core/Avatar";
-import Input from "@material-ui/core/Input";
+
 import Grid from "@material-ui/core/Grid";
 
+import CategoryState from "../../Context/Category/categoryState";
+import AddCategoryForm from "./AddCategoryForm";
+
 class Admin extends Component {
-	state = {
-		redirectToHome: false
-	};
+	constructor() {
+		super();
+		this.state = {
+			redirectToHome: false,
+			categories: []
+		};
+	}
 
 	componentDidMount() {
 		if (isAuthenticated().user.role !== "admin") {
@@ -25,11 +32,21 @@ class Admin extends Component {
 		}
 
 		return (
-			<Fragment>
-				<Grid container justify="space-between">
+			<CategoryState>
+				<Grid container sm={6} xs={12}>
 					<Users />
 				</Grid>
-			</Fragment>
+				<Grid
+					container
+					sm={6}
+					xs={12}
+					justify="space-between"
+					style={{ padding: "0px 32px" }}
+				>
+					<CategoryList />
+					<AddCategoryForm />
+				</Grid>
+			</CategoryState>
 		);
 	}
 }

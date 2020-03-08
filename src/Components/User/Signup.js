@@ -1,17 +1,24 @@
 import React, { Component } from "react";
 import { signup } from "../Auth";
-
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-
 import Typography from "@material-ui/core/Typography";
-
 import Container from "@material-ui/core/Container";
+import { withStyles } from "@material-ui/styles";
+
+const useStyles = theme => ({
+	paper: {
+		position: "absolute",
+		width: 400,
+		backgroundColor: theme.palette.background.paper,
+		border: "2px solid #000",
+		boxShadow: theme.shadows[5],
+		padding: theme.spacing(2, 4, 3)
+	}
+});
 
 class Signup extends Component {
 	constructor() {
@@ -92,7 +99,7 @@ class Signup extends Component {
 			});
 		}
 	};
-	signupForm = (name, email, password, recaptcha) => (
+	signupForm = (name, email, password, recaptcha, error, open) => (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />
 			<div className={this.props.paper} style={{ marginTop: 15 }}>
@@ -105,15 +112,15 @@ class Signup extends Component {
 						<Grid item xs={12}>
 							<div
 								style={{
-									display: this.state.error ? "" : "none",
+									display: error ? "" : "none",
 									color: "red"
 								}}
 							>
-								{this.state.error}
+								{error}
 							</div>
 						</Grid>
 						<Grid item xs={12}>
-							<div style={{ display: this.state.open ? "" : "none" }}>
+							<div style={{ display: open ? "" : "none" }}>
 								New account is successfully created. Please{" "}
 								<Link href="/signin">Sign In</Link>.
 							</div>
@@ -187,7 +194,7 @@ class Signup extends Component {
 								label={recaptcha ? "Thanks. You got it!" : "What day is today?"}
 							/> */}
 						</Grid>
-						<Grid item item xs={12}>
+						<Grid item xs={12}>
 							<div
 								style={{
 									display: recaptcha ? "" : "none ",
@@ -231,10 +238,10 @@ class Signup extends Component {
 
 		return (
 			<React.Fragment>
-				{this.signupForm(name, email, password, recaptcha)}
+				{this.signupForm(name, email, password, recaptcha, error, open)}
 			</React.Fragment>
 		);
 	}
 }
 
-export default Signup;
+export default withStyles(useStyles)(Signup);

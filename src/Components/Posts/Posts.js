@@ -1,10 +1,5 @@
 import React, { Component } from "react";
 import { list } from "./ApiPost";
-// import DefaultPost from "../Images/mountains.jpg";
-import { Link } from "react-router-dom";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
 import FeaturedPost from "./FeaturedPost";
 
 class Posts extends Component {
@@ -22,7 +17,7 @@ class Posts extends Component {
 				console.log(data.error);
 			} else {
 				this.setState({ posts: data });
-				console.log(data);
+				// console.log(data);
 			}
 		});
 	};
@@ -42,25 +37,17 @@ class Posts extends Component {
 	};
 
 	renderPosts = posts => {
-		return (
-			<React.Fragment>
-				<CssBaseline />
-
-				<Grid container spacing={4}>
-					{posts.map(post => (
-						<FeaturedPost key={post._id} post={post} />
-					))}
-				</Grid>
-			</React.Fragment>
-		);
+		return posts.map(post => <FeaturedPost key={post._id} post={post} />);
 	};
 
 	render() {
 		const { posts, page } = this.state;
 		return (
-			<Container maxWidth="lg">
+			<>
 				<main>
-					<h5>{!posts.length ? "No more posts!" : "Recent Posts"} </h5>
+					{/* <Typography>
+						{!posts.length ? "No more posts!" : "Recent Posts"}
+					</Typography> */}
 
 					{this.renderPosts(posts)}
 
@@ -79,7 +66,7 @@ class Posts extends Component {
 						""
 					)}
 				</main>
-			</Container>
+			</>
 		);
 	}
 }

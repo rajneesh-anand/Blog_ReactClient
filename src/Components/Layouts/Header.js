@@ -23,7 +23,9 @@ import Footer from "./Footer";
 import SearchIcon from "@material-ui/icons/Search";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import PersonIcon from "@material-ui/icons/Person";
+import PostAddIcon from "@material-ui/icons/PostAdd";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import Modal from "@material-ui/core/Modal";
 
 const StyledMenu = withStyles({
 	paper: {
@@ -45,23 +47,25 @@ const StyledMenu = withStyles({
 	/>
 ));
 
-const StyledMenuItem = withStyles(theme => ({
-	root: {
-		"&:focus": {
-			backgroundColor: "#99ccff",
-			"& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-				color: theme.palette.common.white
-			}
-		}
-	}
-}))(MenuItem);
+// const StyledMenuItem = withStyles(theme => ({
+// 	root: {
+// 		"&:focus": {
+// 			backgroundColor: "#99ccff",
+// 			"& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+// 				color: theme.palette.common.white
+// 			}
+// 		}
+// 	}
+// }))(MenuItem);
 
 const drawerWidth = 256;
 
 const useStyles = makeStyles(theme => ({
 	root: {
-		display: "flex"
+		flexGrow: 1,
+		height: 99
 	},
+
 	drawer: {
 		[theme.breakpoints.up("sm")]: {
 			width: drawerWidth,
@@ -83,18 +87,14 @@ const useStyles = makeStyles(theme => ({
 		width: theme.spacing(10),
 		height: theme.spacing(10)
 	},
-	toolbar: theme.mixins.toolbar,
 
 	borderBottom: `1px solid ${theme.palette.divider}`,
 	drawerPaper: {
 		width: drawerWidth
 	},
-	content: {
-		flexGrow: 1,
-		padding: theme.spacing(1)
-	},
-	toolbarTitle: {
-		flex: 1
+
+	logoTitle: {
+		flexGrow: 1
 	},
 	toolbarSecondary: {
 		justifyContent: "space-between",
@@ -219,90 +219,97 @@ const Header = ({ history }) => {
 					</List>
 				</Grid>
 			</Grid>
-			<Footer
+			{/* <Footer
 				title="Footer"
 				description="Something here to give the footer a purpose!"
-			/>
+			/> */}
 		</Fragment>
 	);
 
 	return (
-		<React.Fragment>
+		<div className={classes.root}>
 			<CssBaseline />
-			<Toolbar className={classes.toolbar}>
-				<IconButton
-					color="inherit"
-					aria-label="open drawer"
-					edge="start"
-					onClick={handleDrawerToggle}
-					className={classes.menuButton}
-				>
-					<MenuIcon />
-				</IconButton>
+			<AppBar position="sticky" color="default">
+				<Toolbar>
+					<IconButton
+						color="inherit"
+						aria-label="open drawer"
+						edge="start"
+						onClick={handleDrawerToggle}
+						className={classes.menuButton}
+					>
+						<MenuIcon />
+					</IconButton>
 
-				<Button className={classes.appBar} size="small">
+					{/* <Button className={classes.appBar} size="small">
 					Subscribe
-				</Button>
+				</Button> */}
 
-				<Typography
-					component="h2"
-					variant="h5"
-					color="inherit"
-					align="center"
-					className={classes.toolbarTitle}
-				>
-					<Link style={isActive(history, "/")} to="/">
-						<h3 className="logo">E | FLOW</h3>
-					</Link>
-				</Typography>
+					<Typography variant="h6" className={classes.logoTitle}>
+						<Link
+							style={(isActive(history, "/"), { textDecoration: "none" })}
+							to="/"
+						>
+							<img src="../images/logo.png" alt="logo" />
+						</Link>
+					</Typography>
 
-				<IconButton>
-					<SearchIcon />
-				</IconButton>
+					<div style={{ marginRight: "48px" }} className={classes.appBar}>
+						{sections.map(section => (
+							<Button
+								color="inherit"
+								key={section.title}
+								href={section.url}
+								className={classes.toolbarLink}
+							>
+								{section.title}
+							</Button>
+						))}
+					</div>
 
-				{!isAuthenticated() && (
-					<Hidden smDown>
-						<Button
-							component={Link}
-							style={isActive(history, "/signup")}
-							to="/signup"
-						>
-							REGISTER
-						</Button>
-						<Button
-							component={Link}
-							style={isActive(history, "/signin")}
-							to="/signin"
-							onClick={changeEvent}
-						>
-							LOGIN
-						</Button>
-					</Hidden>
-				)}
-				{isAuthenticated() && (
-					<Hidden smDown>
-						<Button
-							aria-controls="customized-menu"
-							aria-haspopup="true"
-							// variant="contained"
-							// color="primary"
-							onClick={handleClick}
-						>
-							{` Hi ${isAuthenticated().user.name}`}
-						</Button>
-						<StyledMenu
-							id="customized-menu"
-							anchorEl={anchorEl}
-							keepMounted
-							open={Boolean(anchorEl)}
-							onClick={handleClose}
-						>
-							<StyledMenuItem>
-								<ListItemIcon>
-									<PersonIcon fontSize="small" />
-								</ListItemIcon>
-								<Button
-									size="small"
+					<IconButton>
+						<SearchIcon />
+					</IconButton>
+
+					{!isAuthenticated() && (
+						<Hidden smDown>
+							<Button
+								component={Link}
+								style={isActive(history, "/signup")}
+								to="/signup"
+							>
+								REGISTER
+							</Button>
+							<Button
+								component={Link}
+								style={isActive(history, "/signin")}
+								to="/signin"
+								onClick={changeEvent}
+							>
+								LOGIN
+							</Button>
+						</Hidden>
+					)}
+					{isAuthenticated() && (
+						<Hidden smDown>
+							<Button
+								aria-controls="customized-menu"
+								aria-haspopup="true"
+								// variant="contained"
+								// color="primary"
+								onClick={handleClick}
+							>
+								{` Hi ${isAuthenticated().user.name}`}
+							</Button>
+
+							<StyledMenu
+								id="customized-menu"
+								anchorEl={anchorEl}
+								keepMounted
+								open={Boolean(anchorEl)}
+								onClick={handleClose}
+							>
+								<MenuItem
 									component={Link}
 									to={`/user/${isAuthenticated().user._id}`}
 									style={isActive(
@@ -310,56 +317,55 @@ const Header = ({ history }) => {
 										`/user/${isAuthenticated().user._id}`
 									)}
 								>
-									Profile
-								</Button>
-								{/* <ListItemText fontSize="small" primary="Profile" /> */}
-							</StyledMenuItem>
-							<StyledMenuItem>
-								<ListItemIcon>
-									<ExitToAppIcon fontSize="small" />
-								</ListItemIcon>
-								<Button
-									style={{ cursor: "pointer" }}
-									size="small"
-									onClick={() => signout(() => history.push("/"))}
-								>
-									Sign Out
-								</Button>
-								{/* <ListItemText primary="Drafts" /> */}
-							</StyledMenuItem>
-							{/* <StyledMenuItem>
 									<ListItemIcon>
-										<InboxIcon fontSize="small" />
+										<PersonIcon fontSize="small" />
 									</ListItemIcon>
-									<ListItemText primary="Inbox" />
-								</StyledMenuItem> */}
-						</StyledMenu>
-					</Hidden>
-				)}
-			</Toolbar>
+									Profile
+								</MenuItem>
 
-			<AppBar position="sticky" className={classes.appBar} color="default">
-				<Toolbar
+								<MenuItem
+									component={Link}
+									to={`/post/create`}
+									style={isActive(history, `/post/create`)}
+								>
+									<ListItemIcon>
+										<PostAddIcon fontSize="small" />
+									</ListItemIcon>
+									New Post
+								</MenuItem>
+
+								<MenuItem onClick={() => signout(() => history.push("/"))}>
+									<ListItemIcon>
+										<ExitToAppIcon fontSize="small" />
+									</ListItemIcon>
+									Sign Out
+								</MenuItem>
+							</StyledMenu>
+						</Hidden>
+					)}
+				</Toolbar>
+			</AppBar>
+			{/* <AppBar position="sticky" className={classes.appBar} color="default"> */}
+			{/* <Toolbar
 					component="nav"
 					variant="dense"
 					className={classes.toolbarSecondary}
-					// position="sticky"
-					// className={classes.toolbar}
-					// style={{ position: "sticky" }}
+					position="sticky"
+					className={classes.toolbar}
+					style={{ position: "sticky" }}
+				> */}
+			{/* {sections.map(section => (
+				<Button
+					color="inherit"
+					key={section.title}
+					href={section.url}
+					className={classes.toolbarLink}
 				>
-					{sections.map(section => (
-						<Button
-							color="inherit"
-							key={section.title}
-							href={section.url}
-							className={classes.toolbarLink}
-						>
-							{section.title}
-						</Button>
-					))}
-				</Toolbar>
-			</AppBar>
-
+					{section.title}
+				</Button>
+			))} */}
+			{/* </Toolbar>
+			</AppBar> */}
 			<Hidden smUp implementation="css">
 				<Drawer
 					variant="temporary"
@@ -375,7 +381,7 @@ const Header = ({ history }) => {
 					{drawer}
 				</Drawer>
 			</Hidden>
-		</React.Fragment>
+		</div>
 	);
 };
 

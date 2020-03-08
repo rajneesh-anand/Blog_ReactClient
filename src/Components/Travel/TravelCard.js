@@ -8,66 +8,81 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import { Link } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
+import DefaultProfile from "../Images/mountains.jpg";
+
+const formatDate = string => {
+	let options = { year: "numeric", month: "short", day: "numeric" };
+	return new Date(string).toLocaleDateString([], options);
+};
+
+const slugify = v => {
+	if (typeof v === "string") {
+		return v
+			.toString()
+			.toLowerCase()
+			.replace(/\s+/g, "-")
+			.replace(/[^\w\-]+/g, "")
+			.replace(/\-\-+/g, "-")
+			.replace(/^-+/, "")
+			.replace(/-+$/, "");
+	}
+	return "";
+};
+
 const TravelCard = props => {
 	const { post } = props;
 	const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
 	const posterName = post.postedBy ? post.postedBy.name : " Unknown";
+	const photoUrl = post.photo ? post.photo : DefaultProfile;
+	const postTitle = slugify(post.title);
 	return (
-		<Grid item xs={12} md={6} style={{ padding: "30px" }}>
-			<Card className={"MuiNewsCard--01"}>
-				<CardMedia
-					className={"MuiCardMedia-root"}
-					image={
-						"https://images.unsplash.com/photo-1468774871041-fc64dd5522f3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2689&q=80"
-					}
+		<Card className={"MuiNewsCard--01"}>
+			<CardContent>
+				<Typography
+					className={"MuiTypography--heading"}
+					variant={"h6"}
+					gutterBottom
 				>
-					<Typography className={"MuiTypography--category"}>
-						{props.post.category.name}
-					</Typography>
-				</CardMedia>
-				<CardContent className={"MuiCardContent-root"}>
-					<Typography
-						className={"MuiTypography--overline"}
-						variant={"overline"}
-						gutterBottom
-					>
-						posted by <Link to={`${posterId}`}>{posterName} </Link>
-						on {new Date(post.created).toDateString("dd.MMM.yyyy")}
-					</Typography>
-					<Typography
-						className={"MuiTypography--heading"}
-						variant={"h6"}
-						gutterBottom
-					>
-						What happened in Thailand?
-					</Typography>
-					<Typography
-						className={"MuiTypography--subheading"}
-						variant={"caption"}
-					>
-						Kayaks crowd Three Sisters Springs, where people and manatees
-						maintain controversial coexistence. Kayaks crowd Three Sisters
-						Springs, where people and manatees maintain controversial
-						coexistence. Kayaks crowd Three Sisters Springs, where people and
-						manatees maintain controversial coexistence. Kayaks crowd Three
-						Sisters Springs, where people and manatees maintain controversial
-						coexistence. Kayaks crowd Three Sisters Springs, where people and
-						manatees maintain controversial coexistence.
-					</Typography>
-				</CardContent>
-				<CardActions className={"MuiCardActions-root"}>
-					<Button
-						color={"primary"}
-						fullWidth
-						component={Link}
-						to={`/post/${post._id}`}
-					>
-						Find Out More <Icon>chevron_right_rounded</Icon>
-					</Button>
-				</CardActions>
-			</Card>
-		</Grid>
+					{post.title}
+				</Typography>
+			</CardContent>
+			<CardMedia className={"MuiCardMedia-root"} image={photoUrl}>
+				<Typography className={"MuiTypography--category"}>
+					{post.category.name}
+				</Typography>
+			</CardMedia>
+			<CardContent className={"MuiCardContent-root"}>
+				<Typography
+					className={"MuiTypography--overline"}
+					variant="button"
+					style={{ fontSize: "0.7rem" }}
+					gutterBottom
+				>
+					posted by <Link to={`${posterId}`}>{posterName} </Link>
+					on {formatDate(post.created)}
+				</Typography>
+				<Typography
+					className={"MuiTypography--heading"}
+					variant={"h6"}
+					gutterBottom
+				>
+					{post.title}
+				</Typography>
+				<Typography className={"MuiTypography--subheading"} variant={"caption"}>
+					{post.body}
+				</Typography>
+			</CardContent>
+			<CardActions className={"MuiCardActions-root"}>
+				<Button
+					color={"primary"}
+					fullWidth
+					component={Link}
+					to={`/post/${post._id}/${postTitle}`}
+				>
+					Find Out More <Icon>chevron_right_rounded</Icon>
+				</Button>
+			</CardActions>
+		</Card>
 	);
 };
 
@@ -84,7 +99,7 @@ TravelCard.getTheme = muiBaseTheme => ({
 					marginLeft: 0
 				},
 				"&:hover": {
-					transform: "scale(1.04)",
+					// transform: "scale(1.04)",
 					boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)"
 				},
 				"& .MuiCardMedia-root": {
@@ -113,7 +128,9 @@ TravelCard.getTheme = muiBaseTheme => ({
 					"& .MuiTypography--subheading": {
 						lineHeight: 1.8,
 						color: muiBaseTheme.palette.text.primary,
-						fontWeight: "bold"
+						// fontWeight: "bold",
+						fontSize: "16px",
+						fontFamily: "Tahoma"
 					}
 				},
 				"& .MuiCardActions-root": {

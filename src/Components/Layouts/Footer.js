@@ -1,47 +1,71 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { Link, withRouter } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
 	footer: {
 		backgroundColor: theme.palette.background.paper,
-		padding: theme.spacing(6, 0)
+		padding: theme.spacing(3, 0)
+	},
+
+	ul: {
+		listStyleType: "none",
+		display: "flex",
+		justifyContent: "space-between",
+		"& li": {
+			padding: "0 8px"
+		}
 	}
 }));
 
 function Copyright() {
 	return (
-		<Typography align="center">
+		<Typography>
 			{"Copyright © "}
 			<Link color="inherit" to="https://material-ui.com/">
 				Your Website
-			</Link>{" "}
-			{new Date().getFullYear()}
-			{"."}
+			</Link>
+			{` ${new Date().getFullYear()}`}
 		</Typography>
 	);
 }
 
-const Footer = props => {
+const Footer = () => {
 	const classes = useStyles();
-	const { description, title } = props;
 
 	return (
 		<footer className={classes.footer}>
-			<Container maxWidth="lg">
-				<Typography gutterBottom></Typography>
-				<Typography align="center">{description}</Typography>
+			<Grid container direction="row" justify="center" alignItems="center">
 				<Copyright />
-				<a href="/privacy" target="_blank" rel="noopener noreferrer">
-					Privacy
-				</a>
-				<a href="/contact" target="_blank" rel="noopener noreferrer">
-					Contact
-				</a>
-			</Container>
+
+				<ul className={classes.ul}>
+					<li>
+						<Typography>
+							<a href="/privacy" target="_blank" rel="noopener noreferrer">
+								Privacy Policy
+							</a>
+						</Typography>
+					</li>
+					<li>
+						<Typography>
+							<a href="/contact">Contact</a>
+						</Typography>
+					</li>
+					<li>
+						<Typography>
+							<a href="http://" target="_blank" rel="noopener noreferrer">
+								Terms of Use
+							</a>
+						</Typography>
+					</li>
+					<li>
+						{/* <a href="http://" target="_blank" rel="noopener noreferrer"></a> */}
+					</li>
+				</ul>
+			</Grid>
 		</footer>
 	);
 };

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { singlePost, remove, like, unlike } from "./ApiPost";
-import DefaultPost from "../Images/mountains.jpg";
+import { singlePost, like, unlike } from "./ApiPost";
 import { Redirect } from "react-router-dom";
 import { isAuthenticated } from "../Auth";
 import Comment from "./Comment";
@@ -14,6 +13,10 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Grid from "@material-ui/core/Grid";
+import FacebookIcon from "@material-ui/icons/Facebook";
+import InstagramIcon from "@material-ui/icons/Instagram";
+import TwitterIcon from "@material-ui/icons/Twitter";
+import Hidden from "@material-ui/core/Hidden";
 
 class SinglePostDetails extends Component {
 	constructor() {
@@ -76,23 +79,10 @@ class SinglePostDetails extends Component {
 		});
 	};
 
-	deletePost = () => {
-		const postId = this.props.match.params.postId;
-		const token = isAuthenticated().token;
-		remove(postId, token).then(data => {
-			if (data.error) {
-				console.log(data.error);
-			} else {
-				this.setState({ redirectToHome: true });
-			}
-		});
-	};
-
-	deleteConfirmed = () => {
-		let answer = window.confirm("Are you sure you want to delete your post?");
-		if (answer) {
-			this.deletePost();
-		}
+	sharePosts = url => {
+		const linkUrl = url;
+		console.log(linkUrl);
+		// <Link to={linkUrl} target="_blank" />;
 	};
 
 	formatDate = string => {
@@ -104,11 +94,15 @@ class SinglePostDetails extends Component {
 		const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
 		const posterName = post.postedBy ? post.postedBy.name : " Unknown";
 		const photoUrl = `${process.env.REACT_APP_API_URL}/user/photo/${post.postedBy._id}`;
+		const url = window.location.href;
+		const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+		const twitterUrl = `https://twitter.com/intent/tweet?url=${url}`;
+		const linkedinUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${url}`;
 
 		const { like, likes } = this.state;
 
 		return (
-			<Grid item xs={12} sm={10} style={{ paddingRight: "8px" }} align="center">
+			<Grid item xs={12} style={{ paddingTop: "8px" }} align="center">
 				<Card className={"MuiPostCard--01"}>
 					<CardMedia
 						className={"MuiCardMedia-root"}
@@ -139,20 +133,29 @@ class SinglePostDetails extends Component {
 						</Typography>
 					</CardContent>
 					<CardActions className={"MuiCardActions-root"}>
-						<Typography variant={"caption"}>
-							{/* <Link block href={"javascript:;"} underline={"none"}> */}
-							posted by <Link to={`${posterId}`}>{posterName} </Link>
-							on {this.formatDate(post.created)}
-							{/* </Link> */}
-						</Typography>
-						<div>
-							<IconButton>
-								<Icon>share</Icon>
+						<Hidden xsDown>
+							<Typography variant={"caption"}>
+								Posted by <Link to={`${posterId}`}>{posterName} </Link>
+								on {this.formatDate(post.created)}
+							</Typography>
+						</Hidden>
+						<div style={{ marginLeft: "auto" }}>
+							<IconButton href={facebookUrl} target="_blank">
+								<FacebookIcon />
 							</IconButton>
+							<IconButton href={linkedinUrl} target="_blank">
+								<InstagramIcon />
+							</IconButton>
+							<IconButton href={twitterUrl} target="_blank">
+								<TwitterIcon />
+							</IconButton>
+
 							<IconButton onClick={this.likeToggle}>
-								<h3>{likes}</h3>
 								{like ? (
-									<Icon style={{ color: "#4d94ff" }}>favorite_rounded</Icon>
+									<>
+										<Typography>{likes}</Typography>
+										<Icon style={{ color: "#4d94ff" }}>favorite_rounded</Icon>
+									</>
 								) : (
 									<Icon>favorite_rounded</Icon>
 								)}
@@ -186,13 +189,7 @@ class SinglePostDetails extends Component {
 				) : (
 					this.renderPost(post)
 				)}
-				<Grid
-					item
-					xs={12}
-					sm={8}
-					style={{ paddingRight: "8px" }}
-					align="center"
-				>
+				<Grid item xs={12} align="center">
 					<Comment
 						postId={post._id}
 						comments={comments.reverse()}
@@ -274,7 +271,8 @@ SinglePostDetails.getTheme = muiBaseTheme => ({
 					fontWeight: "bold"
 				},
 				"& .MuiTypography--subheading": {
-					lineHeight: 1.8
+					lineHeight: 1.8,
+					fontSize: "16px"
 				},
 				"& .MuiCardActions-root": {
 					padding: `0 ${muiBaseTheme.spacing(3)}px ${muiBaseTheme.spacing(

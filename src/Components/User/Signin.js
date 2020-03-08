@@ -88,7 +88,7 @@ class Signin extends Component {
 		}
 	};
 
-	signinForm = (email, password, recaptcha) => (
+	signinForm = (email, password, recaptcha, error) => (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />
 			<div style={{ marginTop: 15 }}>
@@ -101,11 +101,11 @@ class Signin extends Component {
 						<Grid item xs={12}>
 							<div
 								style={{
-									display: this.state.error ? "" : "none",
+									display: error ? "" : "none",
 									color: "red"
 								}}
 							>
-								{this.state.error}
+								{error}
 							</div>
 						</Grid>
 
@@ -190,14 +190,7 @@ class Signin extends Component {
 	);
 
 	render() {
-		const {
-			email,
-			password,
-			error,
-			redirectToReferer,
-			loading,
-			recaptcha
-		} = this.state;
+		const { email, password, error, redirectToReferer, recaptcha } = this.state;
 
 		if (redirectToReferer) {
 			return <Redirect to="/" />;
@@ -205,7 +198,7 @@ class Signin extends Component {
 
 		return (
 			<React.Fragment>
-				{this.signinForm(email, password, recaptcha)}
+				{this.signinForm(email, password, recaptcha, error)}
 			</React.Fragment>
 		);
 	}
