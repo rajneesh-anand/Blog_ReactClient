@@ -25,7 +25,8 @@ class Profile extends Component {
 			redirectToSignin: false,
 			following: false,
 			error: "",
-			posts: []
+			posts: [],
+			loading: false
 		};
 	}
 
@@ -71,12 +72,14 @@ class Profile extends Component {
 			if (data.error) {
 				console.log(data.error);
 			} else {
-				this.setState({ posts: data });
+				this.setState({ posts: data, loading: false });
 			}
 		});
 	};
 
 	componentDidMount() {
+		this.setState({ loading: true });
+
 		const userId = this.props.match.params.userId;
 		this.init(userId);
 	}
@@ -107,8 +110,30 @@ class Profile extends Component {
 		}
 	}
 
+	slugify = v => {
+		if (typeof v === "string") {
+			const a =
+				"àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;";
+			const b =
+				"aaaaaaaaaacccddeeeeeeeegghiiiiiilmnnnnoooooooooprrsssssttuuuuuuuuuwxyyzzz------";
+			const p = new RegExp(a.split("").join("|"), "g");
+
+			return v
+				.toString()
+				.toLowerCase()
+				.replace(/\s+/g, "-") // Replace spaces with -
+				.replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
+				.replace(/&/g, "-and-") // Replace & with 'and'
+				.replace(/[^\w\-]+/g, "") // Remove all non-word characters
+				.replace(/\-\-+/g, "-") // Replace multiple - with single -
+				.replace(/^-+/, "") // Trim - from start of text
+				.replace(/-+$/, ""); // Trim - from end of text
+		}
+		return "";
+	};
+
 	render() {
-		const { redirectToSignin, user, posts } = this.state;
+		const { redirectToSignin, user, posts, loading } = this.state;
 		if (redirectToSignin) return <Redirect to="/signin" />;
 
 		const photoUrl = user._id
@@ -118,10 +143,11 @@ class Profile extends Component {
 			: DefaultProfile;
 
 		const listItem = posts.map(item => {
+			const postTitle = this.slugify(item.title);
 			return (
 				<ListItem key={item._id}>
 					<ListItemText>
-						<Link to={`/post/${item._id}`}>{item.title}</Link>
+						<Link to={`/post/${item._id}/${postTitle}`}>{item.title}</Link>
 					</ListItemText>
 					<Button onClick={this.deleteConfirmed.bind(this, item)}>
 						<DeleteIcon />
@@ -135,10 +161,11 @@ class Profile extends Component {
 		});
 
 		const listNonLogin = posts.map(item => {
+			const postTitle = this.slugify(item.title);
 			return (
 				<ListItem key={item._id}>
 					<ListItemText>
-						<Link to={`/post/${item._id}`}>{item.title}</Link>
+						<Link to={`/post/${item._id}/${postTitle}`}>{item.title}</Link>
 					</ListItemText>
 				</ListItem>
 			);
@@ -146,91 +173,92 @@ class Profile extends Component {
 
 		return (
 			<React.Fragment>
-				<Grid container style={{ marginTop: 16 }}>
-					<Grid item xs={12} sm={4} align="center">
-						<img
-							style={{ height: "150px", borderRadius: "25px", width: "auto" }}
-							src={photoUrl}
-							onError={i => (i.target.src = `${DefaultProfile}`)}
-							alt={user.name}
-						/>
-						<Typography>{user.name}</Typography>
-						<Typography>Email: {user.email}</Typography>
-						<Typography>{`Joined ${new Date(
-							user.created
-						).toDateString()}`}</Typography>
+				{loading ? (
+					<div>
+						<h2>Loading...</h2>
+					</div>
+				) : (
+					<div>
+						<Grid container style={{ marginTop: 16 }}>
+							<Grid item xs={12} sm={4} align="center">
+								<img
+									style={{
+										height: "150px",
+										borderRadius: "25px",
+										width: "auto"
+									}}
+									src={photoUrl}
+									onError={i => (i.target.src = `${DefaultProfile}`)}
+									alt={user.name}
+								/>
+								<Typography>{user.name}</Typography>
+								<Typography>Email: {user.email}</Typography>
+								<Typography>{`Joined ${new Date(
+									user.created
+								).toDateString()}`}</Typography>
 
-						{isAuthenticated().user &&
-						isAuthenticated().user._id === user._id ? (
-							<Fragment>
-								<div>
-									{/* <Button
-										variant="contained"
-										color="primary"
-										component={Link}
-										to={`/post/create`}
-										style={{ margin: 5 }}
-										size="small"
-									>
-										Write Post
-									</Button> */}
+								{isAuthenticated().user &&
+								isAuthenticated().user._id === user._id ? (
+									<Fragment>
+										<div>
+											<Button
+												variant="contained"
+												color="primary"
+												component={Link}
+												to={`/user/edit/${user._id}`}
+												style={{ margin: 5 }}
+												size="small"
+											>
+												Edit Profile
+											</Button>
 
-									<Button
-										variant="contained"
-										color="primary"
-										component={Link}
-										to={`/user/edit/${user._id}`}
-										style={{ margin: 5 }}
-										size="small"
-									>
-										Edit Profile
-									</Button>
+											<DeleteUser userId={user._id} />
+										</div>
+										<div>
+											<Typography>
+												{user.followers.length} Followers
+												<span style={{ paddingLeft: "15px" }}>
+													{user.following.length} Following
+												</span>
+											</Typography>
+										</div>
+									</Fragment>
+								) : (
+									<FollowProfileButton
+										following={this.state.following}
+										onButtonClick={this.clickFollowButton}
+									/>
+								)}
+							</Grid>
 
-									<DeleteUser userId={user._id} />
-								</div>
-								<div>
-									<Typography>
-										{user.followers.length} Followers
-										<span style={{ paddingLeft: "15px" }}>
-											{user.following.length} Following
-										</span>
-									</Typography>
-								</div>
-							</Fragment>
-						) : (
-							<FollowProfileButton
-								following={this.state.following}
-								onButtonClick={this.clickFollowButton}
-							/>
-						)}
-					</Grid>
-
-					<Grid item xs={12} sm={8}>
-						{isAuthenticated().user &&
-						isAuthenticated().user._id === user._id ? (
-							posts.length === 0 ? (
-								<div>
-									<Typography>Hello {user.name}</Typography>
-									<Typography>
-										You don't have any blogs.
-										<Link to={`/post/create`}>Write your first blog.</Link>
-									</Typography>
-								</div>
-							) : (
-								<List>{listItem}</List>
-							)
-						) : isAuthenticated().user.role === "admin" ? (
-							<List>{listItem}</List>
-						) : (
-							<List>{listNonLogin}</List>
-						)}
-					</Grid>
-				</Grid>
-				<Divider style={{ marginTop: "50px" }} />
-				<Grid container style={{ marginTop: 16 }}>
-					{isAuthenticated().user &&
-						isAuthenticated().user.role === "admin" && <Admin />}
-				</Grid>
+							<Grid item xs={12} sm={8}>
+								{isAuthenticated().user &&
+								isAuthenticated().user._id === user._id ? (
+									posts.length === 0 ? (
+										<div>
+											<Typography>Hello {user.name}</Typography>
+											<Typography>
+												You don't have any blogs.
+												<Link to={`/post/create`}>Write your first blog.</Link>
+											</Typography>
+										</div>
+									) : (
+										<List>{listItem}</List>
+									)
+								) : isAuthenticated().user.role === "admin" ? (
+									<List>{listItem}</List>
+								) : (
+									<List>{listNonLogin}</List>
+								)}
+							</Grid>
+						</Grid>
+						<Divider style={{ marginTop: "50px" }} />
+						<Grid container style={{ marginTop: 16 }}>
+							{isAuthenticated().user &&
+								isAuthenticated().user.role === "admin" && <Admin />}
+						</Grid>
+					</div>
+				)}
 			</React.Fragment>
 		);
 	}

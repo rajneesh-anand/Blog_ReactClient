@@ -7,18 +7,6 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import { withStyles } from "@material-ui/styles";
-
-const useStyles = theme => ({
-	paper: {
-		position: "absolute",
-		width: 400,
-		backgroundColor: theme.palette.background.paper,
-		border: "2px solid #000",
-		boxShadow: theme.shadows[5],
-		padding: theme.spacing(2, 4, 3)
-	}
-});
 
 class Signup extends Component {
 	constructor() {
@@ -244,4 +232,4 @@ class Signup extends Component {
 	}
 }
 
-export default withStyles(useStyles)(Signup);
+export default Signup;

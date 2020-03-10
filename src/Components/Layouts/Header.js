@@ -19,13 +19,12 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Divider from "@material-ui/core/Divider";
 import Avatar from "@material-ui/core/Avatar";
 import Grid from "@material-ui/core/Grid";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 import SearchIcon from "@material-ui/icons/Search";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import PersonIcon from "@material-ui/icons/Person";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import Modal from "@material-ui/core/Modal";
 
 const StyledMenu = withStyles({
 	paper: {
@@ -46,17 +45,6 @@ const StyledMenu = withStyles({
 		{...props}
 	/>
 ));
-
-// const StyledMenuItem = withStyles(theme => ({
-// 	root: {
-// 		"&:focus": {
-// 			backgroundColor: "#99ccff",
-// 			"& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-// 				color: theme.palette.common.white
-// 			}
-// 		}
-// 	}
-// }))(MenuItem);
 
 const drawerWidth = 256;
 
@@ -103,6 +91,12 @@ const useStyles = makeStyles(theme => ({
 	toolbarLink: {
 		padding: theme.spacing(1),
 		flexShrink: 0
+	},
+	styleMenuItem: {
+		fontFamily: "Roboto",
+		fontSize: "12px",
+		textTransform: "uppercase",
+		fontWeight: "bold"
 	}
 }));
 
@@ -240,11 +234,6 @@ const Header = ({ history }) => {
 					>
 						<MenuIcon />
 					</IconButton>
-
-					{/* <Button className={classes.appBar} size="small">
-					Subscribe
-				</Button> */}
-
 					<Typography variant="h6" className={classes.logoTitle}>
 						<Link
 							style={(isActive(history, "/"), { textDecoration: "none" })}
@@ -254,12 +243,14 @@ const Header = ({ history }) => {
 						</Link>
 					</Typography>
 
-					<div style={{ marginRight: "48px" }} className={classes.appBar}>
+					<div style={{ marginRight: "96px" }} className={classes.appBar}>
 						{sections.map(section => (
 							<Button
 								color="inherit"
+								component={Link}
 								key={section.title}
-								href={section.url}
+								to={section.url}
+								style={isActive(history, `${section.url}`)}
 								className={classes.toolbarLink}
 							>
 								{section.title}
@@ -320,7 +311,9 @@ const Header = ({ history }) => {
 									<ListItemIcon>
 										<PersonIcon fontSize="small" />
 									</ListItemIcon>
-									Profile
+									<Typography className={classes.styleMenuItem}>
+										Profile
+									</Typography>
 								</MenuItem>
 
 								<MenuItem
@@ -331,41 +324,25 @@ const Header = ({ history }) => {
 									<ListItemIcon>
 										<PostAddIcon fontSize="small" />
 									</ListItemIcon>
-									New Post
+									<Typography className={classes.styleMenuItem}>
+										New Post
+									</Typography>
 								</MenuItem>
 
 								<MenuItem onClick={() => signout(() => history.push("/"))}>
 									<ListItemIcon>
 										<ExitToAppIcon fontSize="small" />
 									</ListItemIcon>
-									Sign Out
+									<Typography className={classes.styleMenuItem}>
+										Sign Out
+									</Typography>
 								</MenuItem>
 							</StyledMenu>
 						</Hidden>
 					)}
 				</Toolbar>
 			</AppBar>
-			{/* <AppBar position="sticky" className={classes.appBar} color="default"> */}
-			{/* <Toolbar
-					component="nav"
-					variant="dense"
-					className={classes.toolbarSecondary}
-					position="sticky"
-					className={classes.toolbar}
-					style={{ position: "sticky" }}
-				> */}
-			{/* {sections.map(section => (
-				<Button
-					color="inherit"
-					key={section.title}
-					href={section.url}
-					className={classes.toolbarLink}
-				>
-					{section.title}
-				</Button>
-			))} */}
-			{/* </Toolbar>
-			</AppBar> */}
+
 			<Hidden smUp implementation="css">
 				<Drawer
 					variant="temporary"

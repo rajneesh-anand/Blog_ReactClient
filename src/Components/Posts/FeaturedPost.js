@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 import CardActions from "@material-ui/core/CardActions";
 import DefaultProfile from "../Images/mountains.jpg";
 import SocialIcons from "../Layouts/SocialIcons";
+import axios from "axios";
 
 const useStyles = makeStyles({
 	card: {
@@ -55,7 +56,6 @@ const FeaturedPost = props => {
 	const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
 	const posterName = post.postedBy ? post.postedBy.name : " Unknown";
 	const postTitle = slugify(post.title);
-	const photoUrl = post.photo ? post.photo : DefaultProfile;
 	const url = window.location.href;
 
 	return (
@@ -76,12 +76,10 @@ const FeaturedPost = props => {
 			<CardMedia
 				component="img"
 				alt={post.title}
-				height="140"
-				image={photoUrl}
+				height="320"
+				image={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
+				onError={i => (i.target.style.display = "none")}
 				className={classes.buttons}
-				style={{
-					display: post.photo ? post.photo : "none "
-				}}
 			/>
 			<CardContent>
 				<Typography variant="subtitle1" color="textPrimary" component="p">
