@@ -8,8 +8,8 @@ import { Link, withRouter } from "react-router-dom";
 const useStyles = makeStyles(theme => ({
 	footer: {
 		backgroundColor: theme.palette.background.paper,
-		padding: theme.spacing(3, 0),
-		height: "99px"
+		padding: theme.spacing(1, 0),
+		height: "60px"
 	},
 
 	ul: {
