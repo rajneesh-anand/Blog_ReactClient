@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 
 class Users extends Component {
+	_isMounted = false;
 	constructor() {
 		super();
 		this.state = {
@@ -12,13 +13,16 @@ class Users extends Component {
 	}
 
 	componentDidMount() {
+		this._isMounted = true;
+
 		list().then(data => {
-			if (data.error) {
-				console.log(data.error);
-			} else {
+			if (this._isMounted) {
 				this.setState({ users: data });
 			}
 		});
+	}
+	componentWillUnmount() {
+		this._isMounted = false;
 	}
 
 	renderUsers = users => (

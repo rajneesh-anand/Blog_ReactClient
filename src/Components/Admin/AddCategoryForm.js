@@ -1,78 +1,96 @@
-import React, { useState, useContext, useEffect } from "react";
-import CategoryContext from "../../Context/Category/categoryContext";
+import React from "react";
 import { isAuthenticated } from "../Auth";
 
-const AddCategoryForm = () => {
-	const categoryContext = useContext(CategoryContext);
+import { AuthContext } from "./index";
 
-	const { addCategory, error } = categoryContext;
+const AddCategoryForm = props => {
+	const { state, dispatch } = React.useContext(AuthContext);
 
-	const [alert, setAlert] = useState("");
+	const [name, setName] = React.useState("");
+	const [description, setDescription] = React.useState("");
 
-	useEffect(() => {
-		setAlert(error);
-	}, [error]);
-
-	const [category, setCategory] = useState({
-		name: "",
-		description: ""
-	});
-
-	// const isValid = () => {
-	// 	const { name, description } = category;
-
-	// 	if (name.length === 0 || description.length === 0) {
-	// 		setError("All fields are required");
-	// 		return false;
-	// 	}
-
-	// 	return true;
-	// };
-
-	const { name, description } = category;
-
-	const onChange = e => {
-		setCategory({ ...category, [e.target.name]: e.target.value });
-		setAlert("");
+	const onClose = e => {
+		props.onClose && props.onClose(e);
 	};
 
-	const onSubmit = e => {
-		e.preventDefault();
+	const isButtonDisabled =
+		name === "" || description === "" || state.isCategorySubmitting;
+
+	const onSubmit = event => {
+		event.preventDefault();
+
 		const token = isAuthenticated().token;
 
-		if (name.length === 0 || name === "") {
-			setAlert("all fields required");
-		} else {
-			addCategory(category, token);
-			setCategory({ name: "", description: "" });
-		}
+		dispatch({
+			type: "ADD_CATEGORY_REQUEST"
+		});
+		const category = {
+			name,
+			description
+		};
+
+		fetch(`${process.env.REACT_APP_API_URL}/category`, {
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": `application/json`
+			},
+			body: JSON.stringify(category)
+		})
+			.then(res => {
+				return res.json();
+			})
+			.then(data => {
+				console.log(data);
+				setName("");
+				setDescription("");
+
+				dispatch({
+					type: "ADD_CATEGORY_SUCCESS",
+					payload: data
+				});
+				onClose();
+			})
+			.catch(error => {
+				dispatch({
+					type: "ADD_CATEGORY_FAILURE"
+				});
+			});
 	};
 
 	return (
-		<form onSubmit={onSubmit}>
-			<h4>Add Category</h4>
-			<div>
+		<div style={{ margin: "32px" }}>
+			<form onSubmit={onSubmit}>
+				<h4>Add Category</h4>
+				<div>
+					<input
+						type="text"
+						placeholder="Name"
+						name="name"
+						value={name}
+						onChange={e => setName(e.target.value)}
+					/>
+				</div>
 				<input
 					type="text"
-					placeholder="Name"
-					name="name"
-					value={name}
-					onChange={onChange}
+					placeholder="Desciption"
+					name="description"
+					value={description}
+					onChange={e => setDescription(e.target.value)}
 				/>
-			</div>
-			<input
-				type="text"
-				placeholder="Desciption"
-				name="description"
-				value={description}
-				onChange={onChange}
-			/>
 
-			<div>
-				<button type="submit">Save</button>
-			</div>
-			<div>{alert !== null ? alert : ""}</div>
-		</form>
+				<div>
+					<button
+						type="button"
+						id="overlay-confirm-button"
+						onClick={onSubmit}
+						disabled={isButtonDisabled}
+					>
+						{state.isCategorySubmitting ? "Submitting..." : "Submit"}
+					</button>
+				</div>
+			</form>
+		</div>
 	);
 };
 

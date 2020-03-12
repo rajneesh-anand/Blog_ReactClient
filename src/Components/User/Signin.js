@@ -76,7 +76,9 @@ class Signin extends Component {
 					this.setState({ error: data.error, loading: false });
 				} else {
 					authenticate(data, () => {
-						this.setState({ redirectToReferer: true });
+						this.setState({
+							redirectToReferer: true
+						});
 					});
 				}
 			});

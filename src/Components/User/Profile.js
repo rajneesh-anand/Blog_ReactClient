@@ -18,6 +18,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 
 class Profile extends Component {
+	_isMounted = false;
 	constructor() {
 		super();
 		this.state = {
@@ -78,10 +79,16 @@ class Profile extends Component {
 	};
 
 	componentDidMount() {
+		this._isMounted = true;
 		this.setState({ loading: true });
 
 		const userId = this.props.match.params.userId;
-		this.init(userId);
+		if (this._isMounted) {
+			this.init(userId);
+		}
+	}
+	componentWillUnmount() {
+		this._isMounted = false;
 	}
 
 	componentWillReceiveProps(props) {

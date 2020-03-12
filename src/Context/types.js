@@ -6,3 +6,4 @@ export const GET_CATEGORY = "GET_CATEGORY";
 export const CLEAR_CATEGORY = "CLEAR_CATEGORY";
 export const ERROR_CATEGORY = "CLEAR_CATEGORY";
 export const SET_CURRENT = "SET_CURRENT";
+export const RESET = "RESET";

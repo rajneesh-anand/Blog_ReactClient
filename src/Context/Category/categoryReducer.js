@@ -6,7 +6,8 @@ import {
 	GET_CATEGORY,
 	CLEAR_CATEGORY,
 	ERROR_CATEGORY,
-	SET_CURRENT
+	SET_CURRENT,
+	RESET
 } from "../types";
 
 export default (state, action) => {
@@ -62,6 +63,9 @@ export default (state, action) => {
 				...state,
 				current: action.payload
 			};
+
+		case RESET:
+			return state;
 
 		default:
 			return state;

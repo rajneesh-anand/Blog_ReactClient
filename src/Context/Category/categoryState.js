@@ -10,7 +10,8 @@ import {
 	GET_CATEGORY,
 	CLEAR_CATEGORY,
 	ERROR_CATEGORY,
-	SET_CURRENT
+	SET_CURRENT,
+	RESET
 } from "../types";
 
 const CategoryState = props => {

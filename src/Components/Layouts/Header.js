@@ -131,7 +131,7 @@ const Header = ({ history }) => {
 	};
 
 	const changeEvent = event => {
-		setAnchorEl(event.currentTarget ? false : true);
+		// setAnchorEl(event.currentTarget ? false : true);
 		setMobileOpen(mobileOpen ? true : false);
 	};
 
