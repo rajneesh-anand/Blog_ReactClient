@@ -61,9 +61,6 @@ const Footer = () => {
 							</a>
 						</Typography>
 					</li>
-					<li>
-						{/* <a href="http://" target="_blank" rel="noopener noreferrer"></a> */}
-					</li>
 				</ul>
 			</Grid>
 		</footer>

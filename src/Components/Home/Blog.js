@@ -28,9 +28,9 @@ export default function Blog() {
 				{/* <Grid item xs={12} sm={3}>
 					<LeftSidebar />
 				</Grid> */}
-				<Grid item xs={12} sm={10}>
+				{/* <Grid item xs={12} sm={10}>
 					<Posts />
-				</Grid>
+				</Grid> */}
 				{/* <Grid item xs={12} sm={3}>
 					<RightSidebar />
 				</Grid> */}

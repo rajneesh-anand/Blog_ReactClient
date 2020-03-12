@@ -102,15 +102,15 @@ const useStyles = makeStyles(theme => ({
 
 const sections = [
 	{ title: "Technology", url: "/posts/technology" },
-	{ title: "Design", url: "/posts/design" },
-	{ title: "Culture", url: "#" },
+	{ title: "Education", url: "/posts/education" },
+	{ title: "Sports", url: "/posts/sports" },
 	{ title: "Business", url: "#" },
 	{ title: "Politics", url: "#" },
 	{ title: "Opinion", url: "#" },
 	{ title: "Science", url: "#" },
 	{ title: "Health", url: "#" },
-	{ title: "Style", url: "#" },
-	{ title: "Travel", url: "/posts/travel" }
+	{ title: "Travel", url: "/posts/travel" },
+	{ title: "Others", url: "/posts/others" }
 ];
 
 const isActive = (history, path) => {
