@@ -51,7 +51,7 @@ const drawerWidth = 256;
 const useStyles = makeStyles(theme => ({
 	root: {
 		flexGrow: 1,
-		height: 99
+		height: "99px"
 	},
 
 	drawer: {

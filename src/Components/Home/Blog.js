@@ -20,7 +20,7 @@ export default function Blog() {
 		<React.Fragment>
 			<CssBaseline />
 
-			<Grid container justify="center">
+			<Grid container justify="center" style={{ height: "calc(100% - 240px)" }}>
 				<Grid item xs={12} sm={12}>
 					<MainFeaturedPost post={mainFeaturedPost} />
 				</Grid>
