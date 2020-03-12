@@ -52,11 +52,7 @@ class Users extends Component {
 	render() {
 		const { users } = this.state;
 
-		return users.size > 0 && users !== null ? (
-			this.renderUsers(users)
-		) : (
-			<h4>No Users</h4>
-		);
+		return <>{this.renderUsers(users)};</>;
 	}
 }
 
