@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import { signin, authenticate } from "../Auth";
 import Button from "@material-ui/core/Button";
@@ -10,27 +10,38 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import SocialLogin from "./SocialLogin";
 import { Divider } from "@material-ui/core";
+import { AuthContext } from "../../Context/Auth/AuthState";
 
-class Signin extends Component {
-	constructor() {
-		super();
-		this.state = {
-			email: "",
-			password: "",
-			error: "",
-			redirectToReferer: false,
-			loading: false,
-			recaptcha: false
-		};
-	}
-
-	handleChange = name => event => {
-		this.setState({ error: "" });
-		this.setState({ [name]: event.target.value });
+const Signin = props => {
+	const { isAuthenticated, user, Signin, error } = React.useContext(
+		AuthContext
+	);
+	const initialState = {
+		email: "",
+		password: "",
+		err: null,
+		recaptcha: false,
+		loading: false
 	};
 
-	recaptchaHandler = e => {
-		this.setState({ error: "" });
+	const [data, setData] = React.useState(initialState);
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			props.history.push("/");
+		}
+	}, [isAuthenticated, props.history]);
+
+	const handleInputChange = event => {
+		setData({
+			...data,
+			[event.target.name]: event.target.value,
+			err: ""
+		});
+	};
+
+	const recaptchaHandler = e => {
+		setData({ ...data, err: null });
 		let userDay = e.target.value.toLowerCase();
 		let dayCount;
 
@@ -51,46 +62,46 @@ class Signin extends Component {
 		}
 
 		if (dayCount === new Date().getDay()) {
-			this.setState({ recaptcha: true });
+			setData({
+				...data,
+				recaptcha: true
+			});
+			// this.setState({ recaptcha: true });
 			return true;
 		} else {
-			this.setState({
+			setData({
+				...data,
 				recaptcha: false
 			});
 			return false;
 		}
 	};
 
-	clickSubmit = event => {
+	const clickSubmit = event => {
 		event.preventDefault();
-		this.setState({ loading: true });
-		const { email, password } = this.state;
-		const user = {
-			email,
-			password
-		};
+		setData({
+			...data,
+			loading: true
+		});
 
-		if (this.state.recaptcha) {
-			signin(user).then(data => {
-				if (data.error) {
-					this.setState({ error: data.error, loading: false });
-				} else {
-					authenticate(data, () => {
-						this.setState({
-							redirectToReferer: true
-						});
-					});
-				}
-			});
+		const user = {
+			email: data.email,
+			password: data.password
+		};
+		console.log(user);
+
+		if (data.recaptcha) {
+			Signin(user);
 		} else {
-			this.setState({
-				loading: false,
-				error: "What day is today? Please write a correct answer!"
+			setData({
+				...data,
+				err: "What day is today? Please write a correct answer!",
+				loading: false
 			});
 		}
 	};
 
-	signinForm = (email, password, recaptcha, error) => (
+	return (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />
 			<div style={{ marginTop: 15 }}>
@@ -98,7 +109,7 @@ class Signin extends Component {
 					Sign In
 				</Typography>
 
-				<form className={this.props.form} noValidate>
+				<form noValidate>
 					<Grid container spacing={2} justify="space-between">
 						<Grid item xs={12}>
 							<div
@@ -108,6 +119,14 @@ class Signin extends Component {
 								}}
 							>
 								{error}
+							</div>
+							<div
+								style={{
+									display: data.err ? "" : "none",
+									color: "red"
+								}}
+							>
+								{data.err}
 							</div>
 						</Grid>
 
@@ -120,9 +139,9 @@ class Signin extends Component {
 								type="email"
 								label="Email Address"
 								name="email"
-								value={email}
+								value={data.email}
 								autoComplete="email"
-								onChange={this.handleChange("email")}
+								onChange={handleInputChange}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -133,10 +152,10 @@ class Signin extends Component {
 								name="password"
 								label="Password"
 								type="password"
-								value={password}
+								value={data.password}
 								id="password"
 								autoComplete="current-password"
-								onChange={this.handleChange("password")}
+								onChange={handleInputChange}
 							/>
 						</Grid>
 
@@ -148,13 +167,13 @@ class Signin extends Component {
 								fullWidth
 								id="reCapcha"
 								label="What day is Today ?"
-								onChange={this.recaptchaHandler}
+								onChange={recaptchaHandler}
 							/>
 						</Grid>
 						<Grid item xs={12}>
 							<div
 								style={{
-									display: recaptcha ? "" : "none ",
+									display: data.recaptcha ? "" : "none ",
 									color: "red"
 								}}
 							></div>
@@ -174,7 +193,7 @@ class Signin extends Component {
 								color="primary"
 								size="small"
 								// className={this.props.submit}
-								onClick={this.clickSubmit}
+								onClick={clickSubmit}
 							>
 								Login
 							</Button>
@@ -186,24 +205,10 @@ class Signin extends Component {
 					</Grid>
 				</form>
 				<Divider style={{ margin: "10px 0px" }} />
-				<SocialLogin />
+				{/* <SocialLogin /> */}
 			</div>
 		</Container>
 	);
-
-	render() {
-		const { email, password, error, redirectToReferer, recaptcha } = this.state;
-
-		if (redirectToReferer) {
-			return <Redirect to="/" />;
-		}
-
-		return (
-			<React.Fragment>
-				{this.signinForm(email, password, recaptcha, error)}
-			</React.Fragment>
-		);
-	}
-}
+};
 
 export default Signin;

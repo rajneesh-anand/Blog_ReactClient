@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -25,6 +25,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import PersonIcon from "@material-ui/icons/Person";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { AuthContext } from "../../Context/Auth/AuthState";
 
 const StyledMenu = withStyles({
 	paper: {
@@ -121,6 +122,14 @@ const isActive = (history, path) => {
 const Header = ({ history }) => {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const [mobileOpen, setMobileOpen] = React.useState(false);
+	const { isAuthenticated, user, Signout } = React.useContext(AuthContext);
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			console.log(isAuthenticated);
+			history.push("/");
+		}
+	}, [isAuthenticated, history]);
 
 	const handleClick = event => {
 		setAnchorEl(event.currentTarget);
@@ -134,6 +143,9 @@ const Header = ({ history }) => {
 		// setAnchorEl(event.currentTarget ? false : true);
 		setMobileOpen(mobileOpen ? true : false);
 	};
+	const signOutHandle = () => {
+		Signout(() => history.push("/"));
+	};
 
 	function handleDrawerToggle() {
 		console.log(!mobileOpen);
@@ -146,34 +158,29 @@ const Header = ({ history }) => {
 		<Fragment>
 			<Grid container style={{ justifyContent: "center" }} direction="column">
 				<Grid item align="center" style={{ paddingTop: "10px" }}>
-					{isAuthenticated() && (
+					{isAuthenticated && (
 						<Fragment>
 							<Avatar
-								alt={isAuthenticated().user.name}
-								src={`${process.env.REACT_APP_API_URL}/user/photo/${
-									isAuthenticated().user._id
-								}`}
+								alt={user.name}
+								src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
 								className={classes.large}
 							/>
-							<h3>{` Hi ${isAuthenticated().user.name}`}</h3>
+							<h3>{` Hi ${user.name}`}</h3>
 							<Button
 								component={Link}
-								to={`/user/${isAuthenticated().user._id}`}
+								to={`/user/${user._id}`}
 								onClick={handleDrawerToggle}
-								style={isActive(history, `/user/${isAuthenticated().user._id}`)}
+								style={isActive(history, `/user/${user._id}`)}
 							>
 								My PAGE
 							</Button>
-							<Button
-								style={{ cursor: "pointer" }}
-								onClick={() => signout(() => history.push("/"))}
-							>
+							<Button style={{ cursor: "pointer" }} onClick={signOutHandle}>
 								Sign Out
 							</Button>
 						</Fragment>
 					)}
 
-					{!isAuthenticated() && (
+					{!isAuthenticated && (
 						<Fragment>
 							<Button
 								component={Link}
@@ -213,10 +220,6 @@ const Header = ({ history }) => {
 					</List>
 				</Grid>
 			</Grid>
-			{/* <Footer
-				title="Footer"
-				description="Something here to give the footer a purpose!"
-			/> */}
 		</Fragment>
 	);
 
@@ -262,7 +265,7 @@ const Header = ({ history }) => {
 						<SearchIcon />
 					</IconButton>
 
-					{!isAuthenticated() && (
+					{!isAuthenticated && (
 						<Hidden smDown>
 							<Button
 								component={Link}
@@ -281,7 +284,7 @@ const Header = ({ history }) => {
 							</Button>
 						</Hidden>
 					)}
-					{isAuthenticated() && (
+					{isAuthenticated && (
 						<Hidden smDown>
 							<Button
 								aria-controls="customized-menu"
@@ -290,7 +293,7 @@ const Header = ({ history }) => {
 								// color="primary"
 								onClick={handleClick}
 							>
-								{` Hi ${isAuthenticated().user.name}`}
+								{` Hi ${user.name}`}
 							</Button>
 
 							<StyledMenu
@@ -302,11 +305,8 @@ const Header = ({ history }) => {
 							>
 								<MenuItem
 									component={Link}
-									to={`/user/${isAuthenticated().user._id}`}
-									style={isActive(
-										history,
-										`/user/${isAuthenticated().user._id}`
-									)}
+									to={`/user/${user._id}`}
+									style={isActive(history, `/user/${user._id}`)}
 								>
 									<ListItemIcon>
 										<PersonIcon fontSize="small" />
@@ -329,7 +329,20 @@ const Header = ({ history }) => {
 									</Typography>
 								</MenuItem>
 
-								<MenuItem onClick={() => signout(() => history.push("/"))}>
+								<MenuItem
+									component={Link}
+									to={`/quiz/create`}
+									style={isActive(history, `/quiz/create`)}
+								>
+									<ListItemIcon>
+										<PostAddIcon fontSize="small" />
+									</ListItemIcon>
+									<Typography className={classes.styleMenuItem}>
+										New Quiz
+									</Typography>
+								</MenuItem>
+
+								<MenuItem onClick={signOutHandle}>
 									<ListItemIcon>
 										<ExitToAppIcon fontSize="small" />
 									</ListItemIcon>

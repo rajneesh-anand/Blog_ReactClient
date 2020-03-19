@@ -2,6 +2,9 @@ import React from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import MainFeaturedPost from "./MainFeaturedPost";
+import QuizCard from "../Travel/QuizCard";
+import QuizCardSecond from "../Travel/QuizCardSecond";
+import Comment from "../Travel/Comment";
 // import LeftSidebar from "../Layouts/LeftSidebar";
 import Posts from "../Posts/Posts";
 // import RightSidebar from "../Layouts/RightSidebar";
@@ -28,6 +31,16 @@ export default function Blog() {
 				{/* <Grid item xs={12} sm={3}>
 					<LeftSidebar />
 				</Grid> */}
+
+				<Grid item xs={12} sm={4} style={{ height: "calc(100% - 320pxpx)" }}>
+					<QuizCard />
+				</Grid>
+				<Grid item xs={12} sm={4} style={{ height: "calc(100% - 320pxpx)" }}>
+					<QuizCardSecond />
+				</Grid>
+				<Grid item xs={12} sm={4} style={{ height: "calc(100% - 320pxpx)" }}>
+					<Comment />
+				</Grid>
 				<Grid item xs={12} sm={10}>
 					<Posts />
 				</Grid>

@@ -1,5 +1,6 @@
 import React from "react";
 import { JssProvider } from "react-jss";
+import clsx from "clsx";
 import { createGenerateClassName } from "@material-ui/core/styles";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import TravelCard from "./TravelCard";
@@ -19,6 +20,26 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Speaker from "../Images/speaker1.jpg";
 import Button from "@material-ui/core/Button";
+import Comment from "../Posts/Comment";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import TelegramIcon from "@material-ui/icons/Telegram";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Input from "@material-ui/core/Input";
+import FormControl from "@material-ui/core/FormControl";
+// import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputLabel from "@material-ui/core/InputLabel";
+
+import IconButton from "@material-ui/core/IconButton";
+
+const useStyles = makeStyles(theme => ({
+	root: {
+		"& > *": {
+			margin: theme.spacing(1),
+			width: "100%"
+		}
+	}
+}));
 
 const muiBaseTheme = createMuiTheme();
 
@@ -31,6 +52,7 @@ function ListItemLink(props) {
 }
 
 function TravelList(props) {
+	const classes = useStyles();
 	return (
 		<JssProvider generateClassName={generateClassName}>
 			<MuiThemeProvider
@@ -41,77 +63,30 @@ function TravelList(props) {
 					overrides: TravelCard.getTheme(muiBaseTheme)
 				})}
 			>
-				<Grid container style={{ marginTop: "8px" }}>
-					<Grid item xs={12} sm={9}>
-						{props.posts.map(post => (
-							<TravelCard key={post._id} post={post} />
-						))}
-					</Grid>
-					<Grid item xs={12} sm={3}>
-						<Card style={{ marginBottom: "8px" }}>
-							<CardContent style={{ backgroundColor: "orange" }}>
-								<Typography
-									gutterBottom
-									variant="h5"
-									component="h2"
-									align="center"
-								>
-									Today's Cheapest Deal
-								</Typography>
-							</CardContent>
-							<CardActionArea>
-								<CardMedia
-									image={Speaker}
-									style={{ height: "280px" }}
-									title="Contemplative Reptile"
-								/>
-							</CardActionArea>
-							<CardActions style={{ justifyContent: "center" }}>
-								<Button
-									size="small"
-									color="primary"
-									variant="contained"
-									style={{ backgroundColor: "orange" }}
-									href="https://www.amazon.in/All-new-Echo-Dot-3rd-Gen/dp/B07PFFMP9P/ref=asc_df_B07PFFMP9P/?tag=googleshopdes-21&linkCode=df0&hvadid=397009308901&hvpos=&hvnetw=g&hvrand=14831419316143759191&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9075215&hvtargid=pla-821432917562&psc=1&ext_vrnc=hi"
-									target="_blank"
-								>
-									Order Now
-								</Button>
-							</CardActions>
-						</Card>
+				<Grid
+					container
+					// justify="center"
+					style={{ height: "calc(100% - 160px)" }}
+				>
+					<TravelCard quiz={props.posts} />
 
-						<Card>
-							<CardContent style={{ backgroundColor: "orange" }}>
-								<Typography
-									gutterBottom
-									variant="h5"
-									component="h2"
-									align="center"
-								>
-									Today's Cheapest Deal
-								</Typography>
-							</CardContent>
-							<CardActionArea>
-								<CardMedia
-									image={Speaker}
-									style={{ height: "280px" }}
-									title="Contemplative Reptile"
-								/>
-							</CardActionArea>
-							<CardActions style={{ justifyContent: "center" }}>
-								<Button
-									size="small"
-									color="primary"
-									variant="contained"
-									style={{ backgroundColor: "orange" }}
-									href="https://www.amazon.in/All-new-Echo-Dot-3rd-Gen/dp/B07PFFMP9P/ref=asc_df_B07PFFMP9P/?tag=googleshopdes-21&linkCode=df0&hvadid=397009308901&hvpos=&hvnetw=g&hvrand=14831419316143759191&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9075215&hvtargid=pla-821432917562&psc=1&ext_vrnc=hi"
-									target="_blank"
-								>
-									Order Now
-								</Button>
-							</CardActions>
-						</Card>
-					</Grid>
+					<form className={classes.root} noValidate autoComplete="off">
+						<Input
+							id="standard-adornment-password"
+							placeholder="password"
+							// onChange={handleChange('password')}
+							endAdornment={
+								<InputAdornment position="end">
+									<IconButton
+
+									//   onClick={handleClickShowPassword}
+									>
+										<TelegramIcon color="secondary" />
+									</IconButton>
+								</InputAdornment>
+							}
+						/>
+					</form>
 				</Grid>
 			</MuiThemeProvider>
 		</JssProvider>

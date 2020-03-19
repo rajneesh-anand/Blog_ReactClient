@@ -21,7 +21,7 @@ class SocialLogin extends Component {
 		// 	imageUrl: imageUrl
 		// };
 		const tokenId = response.tokenId;
-		console.log("sokialtokenid" + tokenId);
+		console.log("social-tokenid" + tokenId);
 		const user = {
 			tokenId: tokenId
 		};

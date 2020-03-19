@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import DefaultProfile from "../Images/avatar.jpg";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import ModeCommentIcon from "@material-ui/icons/ModeComment";
+import IconButton from "@material-ui/core/IconButton";
 
 class Comment extends Component {
 	state = {
@@ -107,8 +109,12 @@ class Comment extends Component {
 					{error}
 				</div>
 
-				<div className="col-md-12">
-					<h3 className="text-primary">{comments.length} Comments</h3>
+				<div>
+					<IconButton>
+						{comments.length}
+						<ModeCommentIcon />
+					</IconButton>
+					{/* <h3 className="text-primary"> </h3> */}
 					<hr />
 					{comments.map((comment, i) => (
 						<div key={i}>
