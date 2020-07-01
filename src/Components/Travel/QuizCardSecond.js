@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 		maxWidth: 345
 	},
 	media: {
-		height: 140
+		height: 280
 	}
 });
 
@@ -92,68 +92,62 @@ function QuizCardSecond() {
 	}
 
 	return (
-		<div>
-			<Card className={classes.root}>
-				<CardActionArea>
-					<CardMedia
-						className={classes.media}
-						image={`${process.env.REACT_APP_API_URL}/quiz/photo/1/active`}
-						title="Contemplative Reptile"
-					/>
-					<CardContent>
-						<Typography gutterBottom variant="h5" component="h2">
-							{title}
-						</Typography>
-						<Typography variant="body2" color="textSecondary" component="p">
-							{bodyFirst}
-						</Typography>
-					</CardContent>
-				</CardActionArea>
-				<CardActions>
-					<Button size="small" color="primary">
-						Share
-					</Button>
+		<Card className={classes.root}>
+			<CardActionArea>
+				<CardMedia
+					className={classes.media}
+					image={`${process.env.REACT_APP_API_URL}/quiz/photo/1/active`}
+					title="Contemplative Reptile"
+				/>
+				<CardContent>
+					<Typography gutterBottom variant="h5" component="h2">
+						{title}
+					</Typography>
+					<Typography variant="body2" color="textSecondary" component="p">
+						{bodyFirst}
+					</Typography>
+				</CardContent>
+			</CardActionArea>
+			<CardActions>
+				<Button size="small" color="primary">
+					Share
+				</Button>
 
-					<IconButton
-						onClick={() =>
-							likeUnlikeToggle(data.likeSecondStatus, "likesSecond")
-						}
-					>
-						<Typography>
-							{" "}
-							{likesSecond.length > 0 ? likesSecond.length : ""}
-						</Typography>
-						{data.likeSecondStatus ? (
-							<ThumbUpAltIcon style={{ color: "#4d94ff" }} />
-						) : (
-							<ThumbUpAltIcon />
-						)}
-					</IconButton>
+				<IconButton
+					onClick={() => likeUnlikeToggle(data.likeSecondStatus, "likesSecond")}
+				>
+					<Typography>
+						{" "}
+						{likesSecond.length > 0 ? likesSecond.length : ""}
+					</Typography>
+					{data.likeSecondStatus ? (
+						<ThumbUpAltIcon style={{ color: "#4d94ff" }} />
+					) : (
+						<ThumbUpAltIcon />
+					)}
+				</IconButton>
 
-					<IconButton
-						onClick={() =>
-							likeUnlikeToggle(data.unlikeSecondStatus, "unlikesSecond")
-						}
-					>
-						<Typography>
-							{unlikesSecond.length > 0 ? unlikesSecond.length : ""}
-						</Typography>
-						{data.unlikeSecondStatus ? (
-							<ThumbDownAltIcon style={{ color: "#4d94ff" }} />
-						) : (
-							<ThumbDownAltIcon />
-						)}
-					</IconButton>
+				<IconButton
+					onClick={() =>
+						likeUnlikeToggle(data.unlikeSecondStatus, "unlikesSecond")
+					}
+				>
+					<Typography>
+						{unlikesSecond.length > 0 ? unlikesSecond.length : ""}
+					</Typography>
+					{data.unlikeSecondStatus ? (
+						<ThumbDownAltIcon style={{ color: "#4d94ff" }} />
+					) : (
+						<ThumbDownAltIcon />
+					)}
+				</IconButton>
 
-					<IconButton>
-						<Typography>
-							{comments.length > 0 ? comments.length : ""}
-						</Typography>
-						<ModeCommentIcon />
-					</IconButton>
-				</CardActions>
-			</Card>
-		</div>
+				<IconButton>
+					<Typography>{comments.length > 0 ? comments.length : ""}</Typography>
+					<ModeCommentIcon />
+				</IconButton>
+			</CardActions>
+		</Card>
 	);
 }
 

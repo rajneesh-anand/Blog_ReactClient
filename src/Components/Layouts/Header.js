@@ -29,19 +29,19 @@ import { AuthContext } from "../../Context/Auth/AuthState";
 
 const StyledMenu = withStyles({
 	paper: {
-		border: "1px solid #d3d4d5"
-	}
-})(props => (
+		border: "1px solid #d3d4d5",
+	},
+})((props) => (
 	<Menu
 		elevation={0}
 		getContentAnchorEl={null}
 		anchorOrigin={{
 			vertical: "bottom",
-			horizontal: "center"
+			horizontal: "center",
 		}}
 		transformOrigin={{
 			vertical: "top",
-			horizontal: "center"
+			horizontal: "center",
 		}}
 		{...props}
 	/>
@@ -49,56 +49,56 @@ const StyledMenu = withStyles({
 
 const drawerWidth = 256;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
-		height: "99px"
+		height: "99px",
 	},
 
 	drawer: {
 		[theme.breakpoints.up("sm")]: {
 			width: drawerWidth,
-			flexShrink: 0
-		}
+			flexShrink: 0,
+		},
 	},
 	appBar: {
 		[theme.breakpoints.down("sm")]: {
-			display: "none"
-		}
+			display: "none",
+		},
 	},
 	menuButton: {
 		marginRight: theme.spacing(2),
 		[theme.breakpoints.up("sm")]: {
-			display: "none"
-		}
+			display: "none",
+		},
 	},
 	large: {
 		width: theme.spacing(10),
-		height: theme.spacing(10)
+		height: theme.spacing(10),
 	},
 
 	borderBottom: `1px solid ${theme.palette.divider}`,
 	drawerPaper: {
-		width: drawerWidth
+		width: drawerWidth,
 	},
 
 	logoTitle: {
-		flexGrow: 1
+		flexGrow: 1,
 	},
 	toolbarSecondary: {
 		justifyContent: "space-between",
-		overflowX: "auto"
+		overflowX: "auto",
 	},
 	toolbarLink: {
 		padding: theme.spacing(1),
-		flexShrink: 0
+		flexShrink: 0,
 	},
 	styleMenuItem: {
 		fontFamily: "Roboto",
 		fontSize: "12px",
 		textTransform: "uppercase",
-		fontWeight: "bold"
-	}
+		fontWeight: "bold",
+	},
 }));
 
 const sections = [
@@ -107,11 +107,11 @@ const sections = [
 	{ title: "Sports", url: "/posts/sports" },
 	{ title: "Business", url: "#" },
 	{ title: "Politics", url: "#" },
-	{ title: "Opinion", url: "#" },
-	{ title: "Science", url: "#" },
+	{ title: "Spirituality", url: "/posts/spirituality" },
+	{ title: "Philosophy", url: "/posts/philosophy" },
 	{ title: "Health", url: "#" },
 	{ title: "Travel", url: "/posts/travel" },
-	{ title: "Others", url: "/posts/others" }
+	{ title: "Others", url: "/posts/others" },
 ];
 
 const isActive = (history, path) => {
@@ -131,7 +131,7 @@ const Header = ({ history }) => {
 		}
 	}, [isAuthenticated, history]);
 
-	const handleClick = event => {
+	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
 
@@ -139,7 +139,7 @@ const Header = ({ history }) => {
 		setAnchorEl(null);
 	};
 
-	const changeEvent = event => {
+	const changeEvent = (event) => {
 		// setAnchorEl(event.currentTarget ? false : true);
 		setMobileOpen(mobileOpen ? true : false);
 	};
@@ -205,7 +205,7 @@ const Header = ({ history }) => {
 				<Divider />
 				<Grid item align="center">
 					<List>
-						{sections.map(section => (
+						{sections.map((section) => (
 							<ListItem color="inherit" key={section.title}>
 								<Button
 									component={Link}
@@ -247,7 +247,7 @@ const Header = ({ history }) => {
 					</Typography>
 
 					<div style={{ marginRight: "96px" }} className={classes.appBar}>
-						{sections.map(section => (
+						{sections.map((section) => (
 							<Button
 								color="inherit"
 								component={Link}
@@ -260,10 +260,10 @@ const Header = ({ history }) => {
 							</Button>
 						))}
 					</div>
-
+					{/* 
 					<IconButton>
 						<SearchIcon />
-					</IconButton>
+					</IconButton> */}
 
 					{!isAuthenticated && (
 						<Hidden smDown>
@@ -362,10 +362,10 @@ const Header = ({ history }) => {
 					open={mobileOpen}
 					onClose={handleDrawerToggle}
 					classes={{
-						paper: classes.drawerPaper
+						paper: classes.drawerPaper,
 					}}
 					ModalProps={{
-						keepMounted: true
+						keepMounted: true,
 					}}
 				>
 					{drawer}
@@ -377,7 +377,7 @@ const Header = ({ history }) => {
 
 Header.propTypes = {
 	sections: PropTypes.array,
-	title: PropTypes.string
+	title: PropTypes.string,
 };
 
 export default withRouter(Header);

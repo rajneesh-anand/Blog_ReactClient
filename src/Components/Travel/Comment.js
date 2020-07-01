@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TextField from "@material-ui/core/TextField";
-import Input from "@material-ui/core/Input";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import { AuthContext } from "../../Context/Auth/AuthState";
@@ -13,17 +12,24 @@ import Fab from "@material-ui/core/Fab";
 import ModeCommentIcon from "@material-ui/icons/ModeComment";
 import { comment, uncomment } from "./APITravel";
 import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import ListItem from "@material-ui/core/ListItem";
+
+import List from "@material-ui/core/List";
 
 const useStyles = makeStyles(theme => ({
 	root: {
-		"& > *": {
-			margin: theme.spacing(1),
-			width: "100%"
-		}
+		width: "100%",
+		height: 400,
+		maxWidth: 300,
+		backgroundColor: theme.palette.background.paper
 	},
 	comment: {
 		marginRight: theme.spacing(1),
-		width: "80%"
+		width: "75%"
+	},
+	button: {
+		marginTop: 12
 	}
 }));
 
@@ -90,45 +96,52 @@ function Comment(props) {
 	}
 
 	return (
-		<>
-			<div className={classes.root}>
-				<div
-					className={classes.comment}
-					style={{ display: "flex", justifyContent: "space-between" }}
-				>
-					<Fab color="default" aria-label="add" size="medium">
-						{comments.length}
-						<ModeCommentIcon color="secondary" />
-					</Fab>
-					<Typography style={{ paddingTop: "16px" }}>
-						{data.error !== "" ? data.error : "What you have to say ?"}
-					</Typography>
-				</div>
-				<form noValidate autoComplete="off">
-					<TextField
-						variant="outlined"
-						className={classes.comment}
-						// required
-						name="text"
-						label="Write your comments ..."
-						type="text"
-						value={data.text}
-						onChange={handleChange}
-					/>
-					<span>
-						<Fab color="default" aria-label="add">
-							<IconButton onClick={addComment}>
-								<AddIcon color="secondary" />
-							</IconButton>
-						</Fab>
-					</span>
-				</form>
+		<div>
+			<div
+				style={{
+					display: "flex",
+					justifyContent: "space-between",
+					padding: "8px"
+				}}
+			>
+				<Fab color="default" aria-label="add" size="medium">
+					{comments.length > 0 ? comments.length : ""}
+					<ModeCommentIcon color="secondary" />
+				</Fab>
+				<Typography style={{ paddingTop: "16px" }}>
+					{data.error !== "" ? data.error : "What you have to say ?"}
+				</Typography>
 			</div>
 
+			<form>
+				<TextField
+					variant="outlined"
+					className={classes.comment}
+					multiline
+					name="text"
+					label="Write your comments ..."
+					type="text"
+					value={data.text}
+					onChange={handleChange}
+				/>
+
+				<Button
+					variant="contained"
+					color="secondary"
+					className={classes.button}
+					onClick={addComment}
+					startIcon={<AddIcon />}
+					size="small"
+				>
+					Post
+				</Button>
+			</form>
+
 			<hr />
-			{comments.map((comment, i) => (
-				<div key={i}>
-					<div style={{ display: "flex" }}>
+
+			<List style={{ maxHeight: 300, overflow: "auto" }}>
+				{comments.map((comment, i) => (
+					<ListItem key={i}>
 						<Link
 							to={`/user/${comment.postedBy._id}`}
 							style={{ textDecoration: "none" }}
@@ -137,37 +150,23 @@ function Comment(props) {
 								alt={comment.postedBy.name}
 								src={`${process.env.REACT_APP_API_URL}/user/photo/${comment.postedBy._id}`}
 							/>
-
-							{/* <img
-								style={{
-									borderRadius: "50%",
-									border: "1px solid black"
-								}}
-								height="30px"
-								width="30px"
-								// onError={i => (i.target.src = `${DefaultProfile}`)}
-								src={`${process.env.REACT_APP_API_URL}/user/photo/${comment.postedBy._id}`}
-								alt={comment.postedBy.name}
-							/> */}
 						</Link>
 						<Typography color="primary">{comment.postedBy.name}</Typography>
 						<Typography style={{ marginLeft: "16px" }}>
 							{comment.text}
 						</Typography>
 						{isAuthenticated && user._id === comment.postedBy._id && (
-							<>
-								<IconButton
-									style={{ marginLeft: "auto" }}
-									onClick={() => deleteComment(comment)}
-								>
-									<DeleteIcon color="secondary" />
-								</IconButton>
-							</>
+							<IconButton
+								style={{ marginLeft: "auto" }}
+								onClick={() => deleteComment(comment)}
+							>
+								<DeleteIcon color="secondary" />
+							</IconButton>
 						)}
-					</div>
-				</div>
-			))}
-		</>
+					</ListItem>
+				))}
+			</List>
+		</div>
 	);
 }
 

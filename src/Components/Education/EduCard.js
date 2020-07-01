@@ -9,10 +9,14 @@ import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import CardActions from "@material-ui/core/CardActions";
 import SocialIcons from "../Layouts/SocialIcons";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles({
 	card: {
 		borderRadius: 0,
+	},
+	grid: {
+		margin: 8,
 	},
 
 	buttons: {
@@ -48,7 +52,7 @@ const slugify = (v) => {
 	return "";
 };
 
-const FeaturedPost = (props) => {
+const EduCard = (props) => {
 	const classes = useStyles();
 	const { post } = props;
 	const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
@@ -57,51 +61,53 @@ const FeaturedPost = (props) => {
 	const url = window.location.href;
 
 	return (
-		<Card className={classes.card}>
-			<CardContent>
-				<Typography gutterBottom variant="h5" component="h2">
-					{post.title}
-				</Typography>
+		<Grid className={classes.grid} item xs={12} sm={5}>
+			<Card className={classes.card}>
+				<CardContent>
+					<Typography gutterBottom variant="h5" component="h2">
+						{post.title}
+					</Typography>
 
-				<Typography variant="button" style={{ fontSize: "0.7rem" }}>
-					Posted by
-					<Link className={classes.buttons} to={`${posterId}`}>
-						{posterName}
-					</Link>
-					on {formatDate(post.created)}
-				</Typography>
-			</CardContent>
-			<CardMedia
-				component="img"
-				alt={post.title}
-				height="320"
-				image={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
-				onError={(i) => (i.target.style.display = "none")}
-				className={classes.buttons}
-			/>
-			<CardContent>
-				<Typography variant="subtitle1" color="textPrimary" component="p">
-					{post.body}
-				</Typography>
-			</CardContent>
+					<Typography variant="button" style={{ fontSize: "0.7rem" }}>
+						Posted by
+						<Link className={classes.buttons} to={`${posterId}`}>
+							{posterName}
+						</Link>
+						on {formatDate(post.created)}
+					</Typography>
+				</CardContent>
+				<CardMedia
+					component="img"
+					alt={post.title}
+					height="320"
+					image={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
+					onError={(i) => (i.target.style.display = "none")}
+					className={classes.buttons}
+				/>
+				<CardContent>
+					<Typography variant="subtitle1" color="textPrimary" component="p">
+						{post.body}
+					</Typography>
+				</CardContent>
 
-			<CardActions style={{ justifyContent: "space-between" }}>
-				<Button
-					component={Link}
-					size="small"
-					to={`/post/${post._id}/${postTitle}`}
-					color="primary"
-				>
-					Continue reading..
-				</Button>
-				<SocialIcons url={url} />
-			</CardActions>
-		</Card>
+				<CardActions style={{ justifyContent: "space-between" }}>
+					<Button
+						component={Link}
+						size="small"
+						to={`/post/${post._id}/${postTitle}`}
+						color="primary"
+					>
+						Continue reading...
+					</Button>
+					<SocialIcons url={url} />
+				</CardActions>
+			</Card>
+		</Grid>
 	);
 };
 
-FeaturedPost.propTypes = {
+EduCard.propTypes = {
 	post: PropTypes.object,
 };
 
-export default FeaturedPost;
+export default EduCard;

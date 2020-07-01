@@ -5,8 +5,9 @@ import { isAuthenticated } from "../Auth";
 import { Redirect } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import AddCategoryForm from "./AddCategoryForm";
+import { AuthContext } from "../../Context/Auth/AuthState";
 
-export const AuthContext = React.createContext();
+export const catContext = React.createContext();
 
 const initialState = {
 	categories: [],
@@ -60,13 +61,16 @@ const reducer = (state, action) => {
 };
 
 const Admin = () => {
+	const { isAuthenticated, user, Signin, error } = React.useContext(
+		AuthContext
+	);
 	const [redirectToHome, setRedirectToHome] = React.useState(false);
 	const [state, dispatch] = React.useReducer(reducer, initialState);
 
 	useEffect(() => {
 		let isCancelled = false;
 
-		if (isAuthenticated().user.role !== "admin") {
+		if (user.role !== "admin") {
 			setRedirectToHome(true);
 		}
 		if (!isCancelled) {
@@ -129,14 +133,14 @@ const Admin = () => {
 					)}
 				</div>
 
-				<AuthContext.Provider
+				<catContext.Provider
 					value={{
 						state,
 						dispatch
 					}}
 				>
 					<AddCategoryForm />
-				</AuthContext.Provider>
+				</catContext.Provider>
 			</Grid>
 		</React.Fragment>
 	);

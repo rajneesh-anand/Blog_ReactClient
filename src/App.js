@@ -10,13 +10,11 @@ import Footer from "./Components/Layouts/Footer";
 const App = () => {
 	return (
 		<AuthState>
-			<QuizState>
-				<Router>
-					<Header />
-					<MainRouter />
-					<Footer />
-				</Router>
-			</QuizState>
+			<Router>
+				<Header />
+				<MainRouter />
+				<Footer />
+			</Router>
 		</AuthState>
 	);
 };

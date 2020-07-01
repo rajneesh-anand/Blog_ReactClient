@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { isAuthenticated } from "../Auth";
 import { Redirect, Link } from "react-router-dom";
-import { read } from "./apiUser";
+import { read, update } from "./apiUser";
 import DefaultProfile from "../Images/avatar.jpg";
 import DeleteUser from "./DeleteUser";
 import FollowProfileButton from "./FollowProfileButton";
@@ -16,6 +16,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
+import LocationOn from "@material-ui/icons/LocationOn";
+import IconButton from "@material-ui/core/IconButton";
+import CalendarToday from "@material-ui/icons/CalendarToday";
 
 class Profile extends Component {
 	_isMounted = false;
@@ -27,7 +30,10 @@ class Profile extends Component {
 			following: false,
 			error: "",
 			posts: [],
-			loading: false
+			loading: false,
+			photo: "",
+			photoSize: 0,
+			photoUrl: ""
 		};
 	}
 
@@ -42,7 +48,7 @@ class Profile extends Component {
 	};
 
 	clickFollowButton = callApi => {
-		const userId = isAuthenticated().user._id;
+		const userId = isAuthenticated._id;
 		const token = isAuthenticated().token;
 
 		callApi(userId, token, this.state.user._id).then(data => {
@@ -55,7 +61,7 @@ class Profile extends Component {
 	};
 
 	init = userId => {
-		const token = isAuthenticated().token;
+		const token = JSON.parse(localStorage.getItem("token"));
 		read(userId, token).then(data => {
 			if (data.error) {
 				this.setState({ redirectToSignin: true });
@@ -68,7 +74,7 @@ class Profile extends Component {
 	};
 
 	loadPosts = userId => {
-		const token = isAuthenticated().token;
+		const token = JSON.parse(localStorage.getItem("token"));
 		listByUser(userId, token).then(data => {
 			if (data.error) {
 				console.log(data.error);
@@ -80,15 +86,19 @@ class Profile extends Component {
 
 	componentDidMount() {
 		this._isMounted = true;
-		this.setState({ loading: true });
-
 		const userId = this.props.match.params.userId;
+		this.setState({
+			loading: true,
+			photoUrl: `${process.env.REACT_APP_API_URL}/user/photo/${userId}`
+		});
+
 		if (this._isMounted) {
 			this.init(userId);
 		}
 	}
 	componentWillUnmount() {
 		this._isMounted = false;
+		this.postData = new FormData();
 	}
 
 	componentWillReceiveProps(props) {
@@ -117,6 +127,45 @@ class Profile extends Component {
 		}
 	}
 
+	isValid = () => {
+		const { photoSize } = this.state;
+		if (photoSize > 100000) {
+			this.setState({
+				error: "File size should be less than 100kb",
+				loading: false
+			});
+			return false;
+		}
+	};
+
+	// photoHandleChange = event => {
+	// 	this.postData.set([event.target.name], event.target.files[0]);
+	// 	this.setState({ photoSize: event.target.files[0].size });
+	// };
+
+	photoChangeEvent = event => {
+		event.preventDefault();
+
+		const formData = new FormData();
+		formData.append("photo", event.target.files[0], event.target.files[0].name);
+		this.setState({ photoSize: event.target.files[0].size });
+
+		const token = JSON.parse(localStorage.getItem("token"));
+		const userId = JSON.parse(localStorage.getItem("user"));
+		console.log(token + userId._id);
+		// if (this.isValid()) {
+		update(userId._id, token, formData).then(data => {
+			if (data.error) {
+				this.setState({ error: data.error });
+			} else {
+				this.setState({
+					photoUrl: `${process.env.REACT_APP_API_URL}/user/photo/${userId._id}`
+				});
+			}
+		});
+		// }
+	};
+
 	slugify = v => {
 		if (typeof v === "string") {
 			const a =
@@ -138,16 +187,14 @@ class Profile extends Component {
 		}
 		return "";
 	};
+	handleEditPicture = () => {
+		const fileInput = document.getElementById("imageInput");
+		fileInput.click();
+	};
 
 	render() {
-		const { redirectToSignin, user, posts, loading } = this.state;
+		const { redirectToSignin, user, posts, loading, photoUrl } = this.state;
 		if (redirectToSignin) return <Redirect to="/signin" />;
-
-		const photoUrl = user._id
-			? `${process.env.REACT_APP_API_URL}/user/photo/${
-					user._id
-			  }?${new Date().getTime()}`
-			: DefaultProfile;
 
 		const listItem = posts.map(item => {
 			const postTitle = this.slugify(item.title);
@@ -198,14 +245,26 @@ class Profile extends Component {
 									onError={i => (i.target.src = `${DefaultProfile}`)}
 									alt={user.name}
 								/>
+								<input
+									type="file"
+									id="imageInput"
+									hidden="hidden"
+									name="photo"
+									onChange={this.photoChangeEvent}
+								/>
+								<IconButton
+									onClick={this.handleEditPicture}
+									color="primary"
+									aria-label="Profile photo change"
+								>
+									<EditIcon />
+								</IconButton>
 								<Typography>{user.name}</Typography>
 								<Typography>Email: {user.email}</Typography>
 								<Typography>{`Joined ${new Date(
 									user.created
 								).toDateString()}`}</Typography>
-
-								{isAuthenticated().user &&
-								isAuthenticated().user._id === user._id ? (
+								{isAuthenticated() && isAuthenticated()._id === user._id ? (
 									<Fragment>
 										<div>
 											<Button
@@ -239,8 +298,7 @@ class Profile extends Component {
 							</Grid>
 
 							<Grid item xs={12} sm={8}>
-								{isAuthenticated().user &&
-								isAuthenticated().user._id === user._id ? (
+								{isAuthenticated() && isAuthenticated()._id === user._id ? (
 									posts.length === 0 ? (
 										<div>
 											<Typography>Hello {user.name}</Typography>
@@ -252,7 +310,7 @@ class Profile extends Component {
 									) : (
 										<List>{listItem}</List>
 									)
-								) : isAuthenticated().user.role === "admin" ? (
+								) : isAuthenticated().role === "admin" ? (
 									<List>{listItem}</List>
 								) : (
 									<List>{listNonLogin}</List>
@@ -261,8 +319,9 @@ class Profile extends Component {
 						</Grid>
 						<Divider style={{ marginTop: "50px" }} />
 						<Grid container style={{ marginTop: 16 }}>
-							{isAuthenticated().user &&
-								isAuthenticated().user.role === "admin" && <Admin />}
+							{isAuthenticated() && isAuthenticated().role === "admin" && (
+								<Admin />
+							)}
 						</Grid>
 					</div>
 				)}

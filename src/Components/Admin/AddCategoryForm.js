@@ -1,10 +1,11 @@
 import React from "react";
-import { isAuthenticated } from "../Auth";
 
-import { AuthContext } from "./index";
+import { AuthContext } from "../../Context/Auth/AuthState";
+import { catContext } from "./index";
 
 const AddCategoryForm = props => {
-	const { state, dispatch } = React.useContext(AuthContext);
+	const { state, dispatch } = React.useContext(catContext);
+	const { isAuthenticated, user, token } = React.useContext(AuthContext);
 
 	const [name, setName] = React.useState("");
 	const [description, setDescription] = React.useState("");
@@ -18,8 +19,6 @@ const AddCategoryForm = props => {
 
 	const onSubmit = event => {
 		event.preventDefault();
-
-		const token = isAuthenticated().token;
 
 		dispatch({
 			type: "ADD_CATEGORY_REQUEST"
@@ -41,7 +40,6 @@ const AddCategoryForm = props => {
 				return res.json();
 			})
 			.then(data => {
-				console.log(data);
 				setName("");
 				setDescription("");
 
