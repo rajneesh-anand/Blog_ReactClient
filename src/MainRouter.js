@@ -17,6 +17,8 @@ import EditPost from "./components/Posts/EditPost";
 import Admin from "./components/Admin";
 import Technology from "./components/Technology";
 import Education from "./components/Education";
+import Philosophy from "./components/Philosophy";
+
 import Testing from "./components/Travel/QuizCard";
 import NewQuiz from "./components/Quiz/NewQuiz";
 
@@ -28,6 +30,7 @@ const MainRouter = () => (
       <Route exact path="/posts/technology" component={Technology} />
 
       <Route exact path="/posts/education" component={Education} />
+      <Route exact path="/posts/philosophy" component={Philosophy} />
 
       <Route exact path="/signup" component={Signup} />
       <Route exact path="/signin" component={Signin} />

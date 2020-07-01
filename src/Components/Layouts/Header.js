@@ -25,359 +25,359 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import PersonIcon from "@material-ui/icons/Person";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import { AuthContext } from "../../Context/Auth/AuthState";
+import { AuthContext } from "../../context/Auth/AuthState";
 
 const StyledMenu = withStyles({
-	paper: {
-		border: "1px solid #d3d4d5",
-	},
+  paper: {
+    border: "1px solid #d3d4d5",
+  },
 })((props) => (
-	<Menu
-		elevation={0}
-		getContentAnchorEl={null}
-		anchorOrigin={{
-			vertical: "bottom",
-			horizontal: "center",
-		}}
-		transformOrigin={{
-			vertical: "top",
-			horizontal: "center",
-		}}
-		{...props}
-	/>
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "center",
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "center",
+    }}
+    {...props}
+  />
 ));
 
 const drawerWidth = 256;
 
 const useStyles = makeStyles((theme) => ({
-	root: {
-		flexGrow: 1,
-		height: "99px",
-	},
+  root: {
+    flexGrow: 1,
+    height: "99px",
+  },
 
-	drawer: {
-		[theme.breakpoints.up("sm")]: {
-			width: drawerWidth,
-			flexShrink: 0,
-		},
-	},
-	appBar: {
-		[theme.breakpoints.down("sm")]: {
-			display: "none",
-		},
-	},
-	menuButton: {
-		marginRight: theme.spacing(2),
-		[theme.breakpoints.up("sm")]: {
-			display: "none",
-		},
-	},
-	large: {
-		width: theme.spacing(10),
-		height: theme.spacing(10),
-	},
+  drawer: {
+    [theme.breakpoints.up("sm")]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  appBar: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up("sm")]: {
+      display: "none",
+    },
+  },
+  large: {
+    width: theme.spacing(10),
+    height: theme.spacing(10),
+  },
 
-	borderBottom: `1px solid ${theme.palette.divider}`,
-	drawerPaper: {
-		width: drawerWidth,
-	},
+  borderBottom: `1px solid ${theme.palette.divider}`,
+  drawerPaper: {
+    width: drawerWidth,
+  },
 
-	logoTitle: {
-		flexGrow: 1,
-	},
-	toolbarSecondary: {
-		justifyContent: "space-between",
-		overflowX: "auto",
-	},
-	toolbarLink: {
-		padding: theme.spacing(1),
-		flexShrink: 0,
-	},
-	styleMenuItem: {
-		fontFamily: "Roboto",
-		fontSize: "12px",
-		textTransform: "uppercase",
-		fontWeight: "bold",
-	},
+  logoTitle: {
+    flexGrow: 1,
+  },
+  toolbarSecondary: {
+    justifyContent: "space-between",
+    overflowX: "auto",
+  },
+  toolbarLink: {
+    padding: theme.spacing(1),
+    flexShrink: 0,
+  },
+  styleMenuItem: {
+    fontFamily: "Roboto",
+    fontSize: "12px",
+    textTransform: "uppercase",
+    fontWeight: "bold",
+  },
 }));
 
 const sections = [
-	{ title: "Technology", url: "/posts/technology" },
-	{ title: "Education", url: "/posts/education" },
-	{ title: "Sports", url: "/posts/sports" },
-	{ title: "Business", url: "#" },
-	{ title: "Politics", url: "#" },
-	{ title: "Spirituality", url: "/posts/spirituality" },
-	{ title: "Philosophy", url: "/posts/philosophy" },
-	{ title: "Health", url: "#" },
-	{ title: "Travel", url: "/posts/travel" },
-	{ title: "Others", url: "/posts/others" },
+  { title: "Technology", url: "/posts/technology" },
+  { title: "Education", url: "/posts/education" },
+  { title: "Sports", url: "/posts/sports" },
+  { title: "Business", url: "#" },
+  { title: "Politics", url: "#" },
+  { title: "Spirituality", url: "/posts/spirituality" },
+  { title: "Philosophy", url: "/posts/philosophy" },
+  { title: "Health", url: "#" },
+  { title: "Travel", url: "/posts/travel" },
+  { title: "Others", url: "/posts/others" },
 ];
 
 const isActive = (history, path) => {
-	if (history.location.pathname === path) return { color: "blue" };
-	else return { color: "black" };
+  if (history.location.pathname === path) return { color: "blue" };
+  else return { color: "black" };
 };
 
 const Header = ({ history }) => {
-	const [anchorEl, setAnchorEl] = React.useState(null);
-	const [mobileOpen, setMobileOpen] = React.useState(false);
-	const { isAuthenticated, user, Signout } = React.useContext(AuthContext);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { isAuthenticated, user, Signout } = React.useContext(AuthContext);
 
-	useEffect(() => {
-		if (isAuthenticated) {
-			console.log(isAuthenticated);
-			history.push("/");
-		}
-	}, [isAuthenticated, history]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      console.log(isAuthenticated);
+      history.push("/");
+    }
+  }, [isAuthenticated, history]);
 
-	const handleClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-	const changeEvent = (event) => {
-		// setAnchorEl(event.currentTarget ? false : true);
-		setMobileOpen(mobileOpen ? true : false);
-	};
-	const signOutHandle = () => {
-		Signout(() => history.push("/"));
-	};
+  const changeEvent = (event) => {
+    // setAnchorEl(event.currentTarget ? false : true);
+    setMobileOpen(mobileOpen ? true : false);
+  };
+  const signOutHandle = () => {
+    Signout(() => history.push("/"));
+  };
 
-	function handleDrawerToggle() {
-		console.log(!mobileOpen);
-		setMobileOpen(!mobileOpen ? true : false);
-	}
+  function handleDrawerToggle() {
+    console.log(!mobileOpen);
+    setMobileOpen(!mobileOpen ? true : false);
+  }
 
-	const classes = useStyles();
+  const classes = useStyles();
 
-	const drawer = (
-		<Fragment>
-			<Grid container style={{ justifyContent: "center" }} direction="column">
-				<Grid item align="center" style={{ paddingTop: "10px" }}>
-					{isAuthenticated && (
-						<Fragment>
-							<Avatar
-								alt={user.name}
-								src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
-								className={classes.large}
-							/>
-							<h3>{` Hi ${user.name}`}</h3>
-							<Button
-								component={Link}
-								to={`/user/${user._id}`}
-								onClick={handleDrawerToggle}
-								style={isActive(history, `/user/${user._id}`)}
-							>
-								My PAGE
-							</Button>
-							<Button style={{ cursor: "pointer" }} onClick={signOutHandle}>
-								Sign Out
-							</Button>
-						</Fragment>
-					)}
+  const drawer = (
+    <Fragment>
+      <Grid container style={{ justifyContent: "center" }} direction="column">
+        <Grid item align="center" style={{ paddingTop: "10px" }}>
+          {isAuthenticated && (
+            <Fragment>
+              <Avatar
+                alt={user.name}
+                src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
+                className={classes.large}
+              />
+              <h3>{` Hi ${user.name}`}</h3>
+              <Button
+                component={Link}
+                to={`/user/${user._id}`}
+                onClick={handleDrawerToggle}
+                style={isActive(history, `/user/${user._id}`)}
+              >
+                My PAGE
+              </Button>
+              <Button style={{ cursor: "pointer" }} onClick={signOutHandle}>
+                Sign Out
+              </Button>
+            </Fragment>
+          )}
 
-					{!isAuthenticated && (
-						<Fragment>
-							<Button
-								component={Link}
-								style={isActive(history, "/signup")}
-								onClick={handleDrawerToggle}
-								to="/signup"
-							>
-								REGISTER
-							</Button>
-							<Button
-								component={Link}
-								style={isActive(history, "/signin")}
-								to="/signin"
-								onClick={handleDrawerToggle}
-							>
-								LOGIN
-							</Button>
-						</Fragment>
-					)}
-				</Grid>
+          {!isAuthenticated && (
+            <Fragment>
+              <Button
+                component={Link}
+                style={isActive(history, "/signup")}
+                onClick={handleDrawerToggle}
+                to="/signup"
+              >
+                REGISTER
+              </Button>
+              <Button
+                component={Link}
+                style={isActive(history, "/signin")}
+                to="/signin"
+                onClick={handleDrawerToggle}
+              >
+                LOGIN
+              </Button>
+            </Fragment>
+          )}
+        </Grid>
 
-				<Divider />
-				<Grid item align="center">
-					<List>
-						{sections.map((section) => (
-							<ListItem color="inherit" key={section.title}>
-								<Button
-									component={Link}
-									size="small"
-									to={section.url}
-									onClick={handleDrawerToggle}
-								>
-									{section.title}
-								</Button>
-							</ListItem>
-						))}
-					</List>
-				</Grid>
-			</Grid>
-		</Fragment>
-	);
+        <Divider />
+        <Grid item align="center">
+          <List>
+            {sections.map((section) => (
+              <ListItem color="inherit" key={section.title}>
+                <Button
+                  component={Link}
+                  size="small"
+                  to={section.url}
+                  onClick={handleDrawerToggle}
+                >
+                  {section.title}
+                </Button>
+              </ListItem>
+            ))}
+          </List>
+        </Grid>
+      </Grid>
+    </Fragment>
+  );
 
-	return (
-		<div className={classes.root}>
-			<CssBaseline />
-			<AppBar position="sticky" color="default">
-				<Toolbar>
-					<IconButton
-						color="inherit"
-						aria-label="open drawer"
-						edge="start"
-						onClick={handleDrawerToggle}
-						className={classes.menuButton}
-					>
-						<MenuIcon />
-					</IconButton>
-					<Typography variant="h6" className={classes.logoTitle}>
-						<Link
-							style={(isActive(history, "/"), { textDecoration: "none" })}
-							to="/"
-						>
-							<img src="../images/logo.png" alt="logo" />
-						</Link>
-					</Typography>
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar position="sticky" color="default">
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" className={classes.logoTitle}>
+            <Link
+              style={(isActive(history, "/"), { textDecoration: "none" })}
+              to="/"
+            >
+              <img src="../images/logo.png" alt="logo" />
+            </Link>
+          </Typography>
 
-					<div style={{ marginRight: "96px" }} className={classes.appBar}>
-						{sections.map((section) => (
-							<Button
-								color="inherit"
-								component={Link}
-								key={section.title}
-								to={section.url}
-								style={isActive(history, `${section.url}`)}
-								className={classes.toolbarLink}
-							>
-								{section.title}
-							</Button>
-						))}
-					</div>
-					{/* 
+          <div style={{ marginRight: "96px" }} className={classes.appBar}>
+            {sections.map((section) => (
+              <Button
+                color="inherit"
+                component={Link}
+                key={section.title}
+                to={section.url}
+                style={isActive(history, `${section.url}`)}
+                className={classes.toolbarLink}
+              >
+                {section.title}
+              </Button>
+            ))}
+          </div>
+          {/* 
 					<IconButton>
 						<SearchIcon />
 					</IconButton> */}
 
-					{!isAuthenticated && (
-						<Hidden smDown>
-							<Button
-								component={Link}
-								style={isActive(history, "/signup")}
-								to="/signup"
-							>
-								REGISTER
-							</Button>
-							<Button
-								component={Link}
-								style={isActive(history, "/signin")}
-								to="/signin"
-								onClick={changeEvent}
-							>
-								LOGIN
-							</Button>
-						</Hidden>
-					)}
-					{isAuthenticated && (
-						<Hidden smDown>
-							<Button
-								aria-controls="customized-menu"
-								aria-haspopup="true"
-								// variant="contained"
-								// color="primary"
-								onClick={handleClick}
-							>
-								{` Hi ${user.name}`}
-							</Button>
+          {!isAuthenticated && (
+            <Hidden smDown>
+              <Button
+                component={Link}
+                style={isActive(history, "/signup")}
+                to="/signup"
+              >
+                REGISTER
+              </Button>
+              <Button
+                component={Link}
+                style={isActive(history, "/signin")}
+                to="/signin"
+                onClick={changeEvent}
+              >
+                LOGIN
+              </Button>
+            </Hidden>
+          )}
+          {isAuthenticated && (
+            <Hidden smDown>
+              <Button
+                aria-controls="customized-menu"
+                aria-haspopup="true"
+                // variant="contained"
+                // color="primary"
+                onClick={handleClick}
+              >
+                {` Hi ${user.name}`}
+              </Button>
 
-							<StyledMenu
-								id="customized-menu"
-								anchorEl={anchorEl}
-								keepMounted
-								open={Boolean(anchorEl)}
-								onClick={handleClose}
-							>
-								<MenuItem
-									component={Link}
-									to={`/user/${user._id}`}
-									style={isActive(history, `/user/${user._id}`)}
-								>
-									<ListItemIcon>
-										<PersonIcon fontSize="small" />
-									</ListItemIcon>
-									<Typography className={classes.styleMenuItem}>
-										Profile
-									</Typography>
-								</MenuItem>
+              <StyledMenu
+                id="customized-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClick={handleClose}
+              >
+                <MenuItem
+                  component={Link}
+                  to={`/user/${user._id}`}
+                  style={isActive(history, `/user/${user._id}`)}
+                >
+                  <ListItemIcon>
+                    <PersonIcon fontSize="small" />
+                  </ListItemIcon>
+                  <Typography className={classes.styleMenuItem}>
+                    Profile
+                  </Typography>
+                </MenuItem>
 
-								<MenuItem
-									component={Link}
-									to={`/post/create`}
-									style={isActive(history, `/post/create`)}
-								>
-									<ListItemIcon>
-										<PostAddIcon fontSize="small" />
-									</ListItemIcon>
-									<Typography className={classes.styleMenuItem}>
-										New Post
-									</Typography>
-								</MenuItem>
+                <MenuItem
+                  component={Link}
+                  to={`/post/create`}
+                  style={isActive(history, `/post/create`)}
+                >
+                  <ListItemIcon>
+                    <PostAddIcon fontSize="small" />
+                  </ListItemIcon>
+                  <Typography className={classes.styleMenuItem}>
+                    New Post
+                  </Typography>
+                </MenuItem>
 
-								<MenuItem
-									component={Link}
-									to={`/quiz/create`}
-									style={isActive(history, `/quiz/create`)}
-								>
-									<ListItemIcon>
-										<PostAddIcon fontSize="small" />
-									</ListItemIcon>
-									<Typography className={classes.styleMenuItem}>
-										New Quiz
-									</Typography>
-								</MenuItem>
+                <MenuItem
+                  component={Link}
+                  to={`/quiz/create`}
+                  style={isActive(history, `/quiz/create`)}
+                >
+                  <ListItemIcon>
+                    <PostAddIcon fontSize="small" />
+                  </ListItemIcon>
+                  <Typography className={classes.styleMenuItem}>
+                    New Quiz
+                  </Typography>
+                </MenuItem>
 
-								<MenuItem onClick={signOutHandle}>
-									<ListItemIcon>
-										<ExitToAppIcon fontSize="small" />
-									</ListItemIcon>
-									<Typography className={classes.styleMenuItem}>
-										Sign Out
-									</Typography>
-								</MenuItem>
-							</StyledMenu>
-						</Hidden>
-					)}
-				</Toolbar>
-			</AppBar>
+                <MenuItem onClick={signOutHandle}>
+                  <ListItemIcon>
+                    <ExitToAppIcon fontSize="small" />
+                  </ListItemIcon>
+                  <Typography className={classes.styleMenuItem}>
+                    Sign Out
+                  </Typography>
+                </MenuItem>
+              </StyledMenu>
+            </Hidden>
+          )}
+        </Toolbar>
+      </AppBar>
 
-			<Hidden smUp implementation="css">
-				<Drawer
-					variant="temporary"
-					open={mobileOpen}
-					onClose={handleDrawerToggle}
-					classes={{
-						paper: classes.drawerPaper,
-					}}
-					ModalProps={{
-						keepMounted: true,
-					}}
-				>
-					{drawer}
-				</Drawer>
-			</Hidden>
-		</div>
-	);
+      <Hidden smUp implementation="css">
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          ModalProps={{
+            keepMounted: true,
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Hidden>
+    </div>
+  );
 };
 
 Header.propTypes = {
-	sections: PropTypes.array,
-	title: PropTypes.string,
+  sections: PropTypes.array,
+  title: PropTypes.string,
 };
 
 export default withRouter(Header);

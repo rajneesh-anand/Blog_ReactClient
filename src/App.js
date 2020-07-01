@@ -4,7 +4,7 @@ import MainRouter from "./MainRouter";
 import AuthState from "./context/Auth/AuthState";
 // import QuizState from "./context/Quiz/QuizState";
 import Header from "./components/Layouts/Header";
-import Footer from "./components/Layouts/Footer";
+// import Footer from "./components/Layouts/Footer";
 import "./components/Styles/custom.css";
 
 const App = () => {
@@ -13,7 +13,7 @@ const App = () => {
       <Router>
         <Header />
         <MainRouter />
-        <Footer />
+        {/* <Footer /> */}
       </Router>
     </AuthState>
   );
