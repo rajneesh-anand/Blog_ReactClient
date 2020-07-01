@@ -1,24 +1,24 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import Home from "./Components/Home/Blog";
-import Signup from "./Components/User/Signup";
-import Signin from "./Components/User/Signin";
-import ForgotPassword from "./Components/User/ForgotPassword";
-import ResetPassword from "./Components/User/ResetPassword";
-// import Header from "./Components/Layouts/Header";
-// import Footer from "./Components/Layouts/Footer";
-import Profile from "./Components/User/Profile";
-// import NewProfile from "./Components/User/NewProfile";
-import PrivateRoute from "./Components/Auth/PrivateRoute";
-import NewPost from "./Components/Posts/NewPost";
-import SinglePost from "./Components/Posts/SinglePost";
-import EditProfile from "./Components/User/EditProfile";
-import EditPost from "./Components/Posts/EditPost";
-import Admin from "./Components/Admin";
-import Technology from "./Components/Technology";
-import Education from "./Components/Education";
-import Testing from "./Components/Travel/QuizCard";
-import NewQuiz from "./Components/Quiz/NewQuiz";
+import Home from "./components/Home/Blog";
+import Signup from "./components/User/Signup";
+import Signin from "./components/User/Signin";
+import ForgotPassword from "./components/User/ForgotPassword";
+import ResetPassword from "./components/User/ResetPassword";
+// import Header from "./components/Layouts/Header";
+// import Footer from "./components/Layouts/Footer";
+import Profile from "./components/User/Profile";
+// import NewProfile from "./components/User/NewProfile";
+import PrivateRoute from "./components/Auth/PrivateRoute";
+import NewPost from "./components/Posts/NewPost";
+import SinglePost from "./components/Posts/SinglePost";
+import EditProfile from "./components/User/EditProfile";
+import EditPost from "./components/Posts/EditPost";
+import Admin from "./components/Admin";
+import Technology from "./components/Technology";
+import Education from "./components/Education";
+import Testing from "./components/Travel/QuizCard";
+import NewQuiz from "./components/Quiz/NewQuiz";
 
 const MainRouter = () => (
   <div>
