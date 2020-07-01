@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import { Redirect } from "react-router-dom";
-import { signin, authenticate } from "../Auth";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -9,7 +7,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import SocialLogin from "./SocialLogin";
-import { Divider } from "@material-ui/core";
 import { AuthContext } from "../../context/Auth/AuthState";
 
 const Signin = (props) => {
@@ -204,7 +201,7 @@ const Signin = (props) => {
             </Grid>
           </Grid>
         </form>
-        <Divider style={{ margin: "10px 0px" }} />
+
         {/* <SocialLogin /> */}
       </div>
     </Container>
